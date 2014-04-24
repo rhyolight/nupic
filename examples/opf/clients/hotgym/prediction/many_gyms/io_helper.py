@@ -1,14 +1,41 @@
+# ----------------------------------------------------------------------
+# Numenta Platform for Intelligent Computing (NuPIC)
+# Copyright (C) 2013, Numenta, Inc.  Unless you have an agreement
+# with Numenta, Inc., for a separate license for this software code, the
+# following terms and conditions apply:
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see http://www.gnu.org/licenses.
+#
+# http://numenta.org/licenses/
+# ----------------------------------------------------------------------
+"""
+Helper dealing with passing data into NuPIC models and extracting their
+predictions. Uses the nupic_output module for output either to file or plot.
+(This is a component of the Many Hot Gyms Prediction Tutorial.)
+"""
 import datetime
 import csv
 
 from nupic.data.inference_shifter import InferenceShifter
 from nupic_output import NuPICFileOutput, NuPICPlotOutput
 
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
-def run_io_through_nupic(input_data, models, names, plot):
+
+def runIoThroughNupic(inputData, models, names, plot):
   readers = []
-  input_files = []
+  inputFiles = []
   if plot:
     output = NuPICPlotOutput(names)
     shifter = InferenceShifter()
@@ -16,36 +43,36 @@ def run_io_through_nupic(input_data, models, names, plot):
     output = NuPICFileOutput(names)
   # Populate input files and csv readers for each model.
   for index, model in enumerate(models):
-    input_file = open(input_data[index], 'rb')
-    input_files.append(input_file)
-    csv_reader = csv.reader(input_file)
+    inputFile = open(inputData[index], 'rb')
+    inputFiles.append(inputFile)
+    csvReader = csv.reader(inputFile)
     # Skip header rows.
-    csv_reader.next()
-    csv_reader.next()
-    csv_reader.next()
+    csvReader.next()
+    csvReader.next()
+    csvReader.next()
     # Reader is now at the top of the real data.
-    readers.append(csv_reader)
+    readers.append(csvReader)
 
-  read_count = 0
+  readCount = 0
 
   while True:
-    next_lines = [next(reader, None) for reader in readers]
+    nextLines = [next(reader, None) for reader in readers]
     # If all lines are None, we're done.
-    if all(value is None for value in next_lines):
-      print "Done after reading %i lines" % read_count
+    if all(value is None for value in nextLines):
+      print "Done after reading %i lines" % readCount
       break
 
-    read_count += 1
+    readCount += 1
 
-    if (read_count % 100 == 0):
-      print "Read %i lines..." % read_count
+    if (readCount % 100 == 0):
+      print "Read %i lines..." % readCount
 
     times = []
     consumptions = []
     predictions = []
 
     # Gather one more input from each input file and send into each model.
-    for index, line in enumerate(next_lines):
+    for index, line in enumerate(nextLines):
       model = models[index]
       # Ignore models that are out of input data.
       if line is None:
@@ -53,7 +80,7 @@ def run_io_through_nupic(input_data, models, names, plot):
         consumption = None
         prediction = None
       else:
-        timestamp = datetime.datetime.strptime(line[0], "%Y-%m-%d %H:%M:%S")
+        timestamp = datetime.datetime.strptime(line[0], DATE_FORMAT)
         consumption = float(line[1])
         result = model.run({
           "timestamp": timestamp,
@@ -74,6 +101,6 @@ def run_io_through_nupic(input_data, models, names, plot):
     output.write(times, consumptions, predictions)
 
   # close all I/O
-  for file in input_files:
-    file.close()
+  for f in inputFiles:
+    f.close()
   output.close()

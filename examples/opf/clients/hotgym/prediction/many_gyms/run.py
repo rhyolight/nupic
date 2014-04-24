@@ -1,5 +1,4 @@
-#! /usr/bin/python
-
+#!/usr/bin/env python
 # ----------------------------------------------------------------------
 # Numenta Platform for Intelligent Computing (NuPIC)
 # Copyright (C) 2013, Numenta, Inc.  Unless you have an agreement
@@ -20,7 +19,6 @@
 #
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
-
 """
 This is the command-line interface for the Hot Gym Tutorial.
 """
@@ -35,10 +33,7 @@ import nupic_runner
 import cleaner
 
 
-def run_hot_gym(args):
-  """
-  """
-
+def runHotGym(args):
   helpString = (
       "\n\n%prog <command> [options]\n\n"
 
@@ -99,33 +94,33 @@ def run_hot_gym(args):
          "output file."
   )
 
-  (options, positional_args) = parser.parse_args(args)
+  (options, positionalArgs) = parser.parse_args(args)
 
   # There must be a command.
-  if len(positional_args) is not 1:
+  if len(positionalArgs) is not 1:
     parser.error("Please specify a command.")
 
-  command = positional_args[0]
+  command = positionalArgs[0]
 
   # Resolve the absolute path to input if there is one.
-  input_path = options.input
-  abs_file_path = None
+  inputPath = options.input
+  absFilePath = None
   if options.input is not None:
-    abs_file_path = os.path.expanduser(input_path)
-    abs_file_path = os.path.expandvars(abs_file_path)
-    abs_file_path = os.path.abspath(abs_file_path)
+    absFilePath = os.path.expanduser(inputPath)
+    absFilePath = os.path.expandvars(absFilePath)
+    absFilePath = os.path.abspath(absFilePath)
 
   # Handle swarm command.
   if command == "swarm":
-    if abs_file_path is None:
+    if absFilePath is None:
       parser.error("'%s' command requires an --input option." % command)
 
-    swarm_helper.swarm(abs_file_path)
+    swarm_helper.swarm(absFilePath)
 
   # Handle generate_data command.
   elif command == "generate_data":
-    if abs_file_path:
-      generate_data.run(abs_file_path)
+    if absFilePath:
+      generate_data.run(absFilePath)
     else:
       generate_data.run()
 
@@ -134,17 +129,17 @@ def run_hot_gym(args):
     if options.name is None and options.all is False:
       parser.error("'%s' command requires a --name or --all option." % command)
     if options.all:
-      nupic_runner.run_all_models(options.plot)
+      nupic_runner.runAllModels(options.plot)
     else:
-      nupic_runner.run_model(options.name, options.plot)
+      nupic_runner.runModel(options.name, options.plot)
 
   # Handle the kitchen sink.
   elif command == "kitchen_sink":
-    nupic_runner.run_it_all(gym_name=options.name, plot=options.plot)
+    nupic_runner.runItAll(gymName=options.name, plot=options.plot)
 
   # Handle cleanup command by calling the cleaner.
   elif command == "cleanup":
-    cleaner.cleanup(working_dirs=["swarm"])
+    cleaner.cleanUp(workingDirs=["swarm"])
 
   else:
     parser.error("Unrecognized command '%s'." % command)
@@ -152,4 +147,4 @@ def run_hot_gym(args):
 
 
 if __name__ == "__main__":
-  run_hot_gym(sys.argv[1:])
+  runHotGym(sys.argv[1:])
