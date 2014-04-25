@@ -1,12 +1,14 @@
 # Many Hot Gyms Prediction Tutorial
 
-The program in this folder is the complete source code for the "One Hot Gym Prediction" Tutorial.
+The program in this folder is the complete source code for the "Many Hot Gyms Prediction" Tutorial. This is an extension to the "One Hot Gyms Prediction Tutorial". It presents a more complete case-study of a NuPIC application that processes many inputs, creates many NuPIC models, and feeds data & extracts predictions from all of them at once.
 
 ## Premise
 
-The "hot gym" sample application has been around for a long time, and was one of the first real-world applications of NuPIC that actually worked. The data used is real energy consumption data from a gym in Australia. It is aggregated hourly already, so the input file at [rec-center-hourly.csv](rec-center-hourly.csv) simply contains a timestamp and float value for energy consumption during that hour.
+The "hot gym" sample application has been around for a long time, and was one of the first real-world applications of NuPIC that actually worked. The data used is real energy consumption data from several gym buildings in Australia. We start with a raw data file and process in a way that NuPIC can swarm over the data, then feed each one into NuPIC Models.
 
-> **TODO: Premise for this particular tutorial**
+### What's the different between this and the "One Gym" Tutorial?
+
+This program is a more complete application with more processing options. It starts from a raw data file, showing how to process it into multiple files formatted for NuPIC (one for each gym). Each step of this process is broken into commands for a CLI, and can be run on one gym at a time, or all gyms simultaneously. The output is can be plotted and viewed across all gyms at once, which makes for an interesting demo of the live capabilities of many NuPIC Models at once.
 
 ## Program Description
 
@@ -16,6 +18,7 @@ This is a Python CLI program that uses NuPIC's [Online Prediction Framework](htt
 
 ### 1. Swarming Over the Input Data
 
+Swarming is an essential part of preparing a NuPIC Model. 
 
 #### Swarm Description
 
