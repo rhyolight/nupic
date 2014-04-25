@@ -70,13 +70,13 @@ BASE_SWARM_DESCRIPTION = {
     }
   },
 
-  "inferenceType": "MultiStep",
+  "inferenceType": "TemporalMultiStep",
   "inferenceArgs": {
     "predictionSteps": [
       1
     ],
     "predictedField": "kw_energy_consumption"
   },
-  "iterationCount": 1,
-  "swarmSize": "small"
+  "iterationCount": -1,
+  "swarmSize": "medium"
 }
