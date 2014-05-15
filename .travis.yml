@@ -7,22 +7,22 @@ language: cpp
 matrix:
   fast_finish: true
   include:
-    - os: linux
-      compiler: clang
-      env:
-        - PY_VER=2.6
-    - os: linux
-      compiler: gcc
-      env:
-        - PY_VER=2.6
-    - os: linux
-      compiler: clang
-      env:
-        - PY_VER=2.7
-    - os: linux
-      compiler: gcc
-      env:
-        - PY_VER=2.7
+    # - os: linux
+    #   compiler: clang
+    #   env:
+    #     - PY_VER=2.6
+    # - os: linux
+    #   compiler: gcc
+    #   env:
+    #     - PY_VER=2.6
+    # - os: linux
+    #   compiler: clang
+    #   env:
+    #     - PY_VER=2.7
+    # - os: linux
+    #   compiler: gcc
+    #   env:
+    #     - PY_VER=2.7
     - os: osx
       compiler: clang
       env:
