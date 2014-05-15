@@ -4,13 +4,13 @@ branches:
 
 language: cpp
 
+os:
+  - linux
+  - osx
+
 compiler:
   - clang
   - gcc
-
-matrix:
-  - os: linux
-  - os: osx
 
 git:
   submodules: false
