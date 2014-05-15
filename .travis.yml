@@ -49,8 +49,6 @@ before_install:
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo apt-get update; fi"
   # Install pip for OSX
   - "if [ $TRAVIS_OS_NAME = 'osx' ]; then sudo easy_install pip; fi"
-  # XCode command line tools for OSX
-  - "if [ $TRAVIS_OS_NAME = 'osx' ]; then xcode-select --install; fi"
   # Install virtualenv
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo apt-get install python$PY_VER python$PY_VER-dev python-virtualenv; fi"
   - "if [ $TRAVIS_OS_NAME = 'osx' ]; then sudo pip install virtualenv; fi"
@@ -58,10 +56,14 @@ before_install:
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo ls -laFh /usr/lib/libpython$PY_VER.so; fi"
   # Prefix env with our own python installation
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then export PYTHONPATH=$PYTHONPATH:$NTA/lib/python$PY_VER/site-packages; fi"
+  # Get Darwin64 libs for OSX
+  - "if [ $TRAVIS_OS_NAME = 'osx' ]; then git clone https://github.com/numenta/nupic-darwin64.git; fi"
+  - "if [ $TRAVIS_OS_NAME = 'osx' ]; then (cd nupic-linux64 && git reset --hard 4a907d6fcdb6937094b97f42f8b9592690ad1ade); fi"
   # Execute virtualenv
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then virtualenv --python=`which python$PY_VER` .; fi"
+  - "if [ $TRAVIS_OS_NAME = 'linux' ]; then source bin/activate; fi"
   - "if [ $TRAVIS_OS_NAME = 'osx' ]; then virtualenv .; fi"
-  - "source bin/activate"
+  - "if [ $TRAVIS_OS_NAME = 'osx' ]; then source nupic-linux64/bin/activate; fi"
   # Workaround for multiprocessing.Queue SemLock error from run_opf_bechmarks_test.
   # See: https://github.com/travis-ci/travis-cookbooks/issues/155
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm; fi"
