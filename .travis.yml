@@ -8,6 +8,11 @@ compiler:
   - clang
   - gcc
 
+matrix:
+  include:
+    - os: linux
+    - os: osx
+
 git:
   submodules: false
 
