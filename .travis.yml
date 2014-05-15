@@ -51,7 +51,7 @@ before_install:
   - "if [ $TRAVIS_OS_NAME = 'osx' ]; then sudo easy_install pip; fi"
   # Install virtualenv
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo apt-get install python$PY_VER python$PY_VER-dev python-virtualenv; fi"
-  - "if [ $TRAVIS_OS_NAME = 'osx' ]; then pip install virtualenv; fi"
+  - "if [ $TRAVIS_OS_NAME = 'osx' ]; then sudo pip install virtualenv; fi"
   # Mork Linux prep work
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo ls -laFh /usr/lib/libpython$PY_VER.so; fi"
   # Prefix env with our own python installation
