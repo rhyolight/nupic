@@ -54,7 +54,8 @@ before_install:
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo ls -laFh /usr/lib/libpython$PY_VER.so; fi"
   # Prefix env with our own python installation
   - "export PYTHONPATH=$PYTHONPATH:$NTA/lib/python$PY_VER/site-packages"
-  - "virtualenv --python=`which python$PY_VER` ."
+  - "if [ $TRAVIS_OS_NAME = 'linux' ]; then virtualenv --python=`which python$PY_VER` .; fi"
+  - "if [ $TRAVIS_OS_NAME = 'osx' ]; then virtualenv .; fi"
   - "source bin/activate"
   # Workaround for multiprocessing.Queue SemLock error from run_opf_bechmarks_test.
   # See: https://github.com/travis-ci/travis-cookbooks/issues/155
