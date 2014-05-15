@@ -49,6 +49,8 @@ before_install:
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo apt-get update; fi"
   # Install pip for OSX
   - "if [ $TRAVIS_OS_NAME = 'osx' ]; then sudo easy_install pip; fi"
+  # XCode command line tools for OSX
+  - "if [ $TRAVIS_OS_NAME = 'osx' ]; then xcode-select --install; fi"
   # Install virtualenv
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo apt-get install python$PY_VER python$PY_VER-dev python-virtualenv; fi"
   - "if [ $TRAVIS_OS_NAME = 'osx' ]; then sudo pip install virtualenv; fi"
