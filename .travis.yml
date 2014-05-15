@@ -59,8 +59,8 @@ before_install:
   - if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo add-apt-repository -y ppa:fkrull/deadsnakes; fi
   - if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo apt-get update; fi
   - if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo apt-get install python$PY_VER python$PY_VER-dev python-virtualenv; fi
-  - if [ $TRAVIS_OS_NAME = 'osx' ] && [ $PY_VER = '2.6' ]; then brew install python$PY_VER; fi
-  - sudo ls -laFh /usr/lib/libpython$PY_VER.so
+  - if [ $TRAVIS_OS_NAME = 'osx' ] && [ $PY_VER = '2.6' ]; then brew install python26; fi
+  - if [ $TRAVIS_OS_NAME = 'linux' ]; then sudo ls -laFh /usr/lib/libpython$PY_VER.so; fi
   # Prefix env with our own python installation
   - "export PYTHONPATH=$PYTHONPATH:$NTA/lib/python$PY_VER/site-packages"
   - virtualenv --python=`which python$PY_VER` .
@@ -74,7 +74,10 @@ before_install:
 install:
   - "mkdir -p $TRAVIS_BUILD_DIR/build/scripts"
   - "cd $TRAVIS_BUILD_DIR/build/scripts"
+  # Verify cmake version
   - "cmake --version"
+  # Verify python version
+  - python --version
   # Build NuPIC
   - "PYTHON=`which python$PY_VER` cmake $NUPIC -DPYTHON_LIBRARY=/usr/lib/libpython$PY_VER.so -DPROJECT_BUILD_RELEASE_DIR:STRING=$NTA"
   - "make -j3"
