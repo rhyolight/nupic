@@ -105,6 +105,8 @@ install:
   - "make -j3"
   - "cd"
 
+script: echo dummy script
+
 # script:
 #   - "cd $TRAVIS_BUILD_DIR/build/scripts"
 #   # legacy binary tests
