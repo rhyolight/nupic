@@ -106,9 +106,11 @@ install:
 script:
 
   - mkdir ${TRAVIS_BUILD_DIR}/build/archive}
-  - ls -l ${TRAVIS_BUILD_DIR}/build/archive}
-  - ls -l ${NTA}/../eng
   - tar -zcf ${TRAVIS_BUILD_DIR}/build/archive}/nupic-linux64-${TRAVIS_COMMIT}.tar.gz -C $NTA/.. --transform=s/eng/nupic-linux64-${TRAVIS_COMMIT}/ --exclude="*.pyc" eng
+  - ls -l ${TRAVIS_BUILD_DIR}/build/archive}
+  - stat ${TRAVIS_BUILD_DIR}/build/archive}/nupic-linux64-${TRAVIS_COMMIT}.tar.gz
+
+
   # - mv nupic-linux64-${TRAVIS_COMMIT}.tar.gz ${TRAVIS_BUILD_DIR}/build/archive/.
 
 #   - "cd $TRAVIS_BUILD_DIR/build/scripts"
