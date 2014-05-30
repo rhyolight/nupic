@@ -32,7 +32,7 @@ matrix:
 before_deploy:
   # Tar up the release directory
   - mkdir ${TRAVIS_BUILD_DIR}/build/archive
-  - tar -zcf ${TRAVIS_BUILD_DIR}/build/archive}/nupic-linux64-${TRAVIS_COMMIT}.tar.gz -C $NTA/.. --transform=s/eng/nupic-linux64-${TRAVIS_COMMIT}/ --exclude="*.pyc" eng
+  - tar -zcf ${TRAVIS_BUILD_DIR}/build/archive/nupic-linux64-${TRAVIS_COMMIT}.tar.gz -C $NTA/.. --transform=s/eng/nupic-linux64-${TRAVIS_COMMIT}/ --exclude="*.pyc" eng
   - ls -l ${NTA}/..
   - ls -l ${TRAVIS_BUILD_DIR}/build/archive
 
