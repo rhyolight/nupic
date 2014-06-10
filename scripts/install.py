@@ -10,7 +10,21 @@ ANY EXTRA code related to build process MUST be put into CMake file.
 repositoryDir = os.getcwd()
 
 
-def find_packages(repositoryDir):
+def getVariable(configFile, variable):
+  """
+  Open a file and gets a variable in the format:
+  foo = bar
+  """
+  with open(configFile) as f:
+    for line in f:
+      eqIndex = line.find('=')
+      varName = line[:eqIndex].strip()
+      varValue = line[eqIndex + 1:].strip()
+      if (varName == variable):
+        return varValue
+
+
+def findPackages(repositoryDir):
   """
   Traverse nupic directory and create packages for each subdir containing a
   __init__.py file
@@ -27,8 +41,8 @@ def find_packages(repositoryDir):
 os.chdir(repositoryDir)
 setup(
   name = 'nupic',
-  version = '1.0.0',
-  packages = find_packages(repositoryDir),
+  version = getVariable(repositoryDir + "/nupic/__init__.py", "__version__"),
+  packages = findPackages(repositoryDir),
   package_data = {
     'nupic': ['README.md', 'LICENSE.txt'],
     'nupic.bindings': ['_*.so', '_*.dll'],
