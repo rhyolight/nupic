@@ -54,7 +54,9 @@ _Note_: If you get a "permission denied" error when using pip, you may add the -
 
 If you want NuPIC only for your apps use it, simply do this:
 
-    pip install nupic
+    python setup.py install
+
+_Note_: If you get a "permission denied" error when using pip, you may add the --user flag to install to a location in your home directory, which should resolve any permissions issues. Doing this, you may need to add this location to your PATH and PYTHONPATH. Alternatively, you can run pip with 'sudo'.
 
 Once it is installed, you can import NuPIC library to your python script using:
 

@@ -231,7 +231,7 @@ endmacro()
 # This macro generates a swig module
 macro(generate_swig_module name output_dir sub_dir swig_flags cxx_flags extra_source link_flags libraries)
   string(REPLACE " " ";" swig_flags ${swig_flags})
-  file(MAKE_DIRECTORY "${REPOSITORY_DIR}/temp/${sub_dir}")
+  file(MAKE_DIRECTORY "${PROJECT_BUILD_TEMP_DIR}/${sub_dir}")
 
   set(CMAKE_SWIG_OUTDIR "${output_dir}")
 
@@ -298,13 +298,13 @@ macro(generate_submodule_library name submodule_dir extra_cxxflags extra_linkfla
     message(FATAL_ERROR "Compiling '${name}' library within ${REPOSITORY_DIR} failed.")
   endif()
   # Copy binaries outputted by submodule build process to 'release' folder
-  copy_directory(${submodule_dir}/build/release/bin ${REPOSITORY_DIR}/bin)
-  copy_directory(${submodule_dir}/build/release/lib ${REPOSITORY_DIR}/lib)
-  copy_directory(${submodule_dir}/build/release/include ${REPOSITORY_DIR}/include)
+  copy_directory(${submodule_dir}/build/release/bin ${PROJECT_BUILD_BINARIES_DIR})
+  copy_directory(${submodule_dir}/build/release/lib ${PROJECT_BUILD_LIBRARIES_DIR})
+  copy_directory(${submodule_dir}/build/release/include ${PROJECT_BUILD_INCLUDE_DIR})
 
   # Configure submodule libraries
   add_library(${name} STATIC IMPORTED GLOBAL)
-  set_property(TARGET ${name} PROPERTY IMPORTED_LOCATION "${REPOSITORY_DIR}/lib/lib${name}.${STATIC_LIB_EXTENSION}")
+  set_property(TARGET ${name} PROPERTY IMPORTED_LOCATION "${PROJECT_BUILD_LIBRARIES_DIR}/lib${name}.${STATIC_LIB_EXTENSION}")
 endmacro()
 
 # This macro converts a "snake_case" style string to an "UpperCamelCase" style string
@@ -373,17 +373,22 @@ endif()
 # Repository root is the parent directory which this CMake file is located
 # This CMake file must be always on /repository/src subdirectory.
 set(REPOSITORY_DIR ${PROJECT_SOURCE_DIR})
+set(PROJECT_BUILD_BINARIES_DIR ${REPOSITORY_DIR}/bin)
+set(PROJECT_BUILD_LIBRARIES_DIR ${REPOSITORY_DIR}/lib)
+set(PROJECT_BUILD_INCLUDE_DIR ${REPOSITORY_DIR}/include)
+set(PROJECT_BUILD_TEMP_DIR ${REPOSITORY_DIR}/temp)
+
 # CMAKE_CURRENT_BINARY_DIR is used by swig module for put wrappers on, so don't erase this line!
-set(CMAKE_CURRENT_BINARY_DIR ${REPOSITORY_DIR}/temp)
+set(CMAKE_CURRENT_BINARY_DIR ${PROJECT_BUILD_TEMP_DIR})
 
 #
 # Prepare directory structure
 #
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/include)
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/lib)
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/bin)
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/temp/lib)
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/temp/obj)
+execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_INCLUDE_DIR})
+execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_LIBRARIES_DIR})
+execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_BINARIES_DIR})
+execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_TEMP_DIR}/lib)
+execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_TEMP_DIR}/obj)
 
 #
 # Set OS flags
@@ -583,7 +588,7 @@ add_definitions(-std=c++98) # smart flag setting for gcc/clang
 # Allows us to find includes for external libraries and enables
 # #include <nta/common/...>
 #
-set(NTA_INCLUDEFLAGS "-I${REPOSITORY_DIR} -I${REPOSITORY_DIR}/extensions -I${REPOSITORY_DIR}/include -isystem${REPOSITORY_DIR}/extensions/core/external/common/include -isystem${REPOSITORY_DIR}/extensions/core/external/${NTA_PLATFORM_OS}/include -isystem${REPOSITORY_DIR}/external/common/include -isystem${REPOSITORY_DIR}/external/${NTA_PLATFORM_OS}/include")
+set(NTA_INCLUDEFLAGS "-I${REPOSITORY_DIR} -I${REPOSITORY_DIR}/extensions -I${PROJECT_BUILD_INCLUDE_DIR} -isystem${REPOSITORY_DIR}/extensions/core/external/common/include -isystem${REPOSITORY_DIR}/extensions/core/external/${NTA_PLATFORM_OS}/include -isystem${REPOSITORY_DIR}/external/common/include -isystem${REPOSITORY_DIR}/external/${NTA_PLATFORM_OS}/include")
 
 #
 # NTA_INTERNAL tells us that the code is being built under the build system
@@ -594,7 +599,7 @@ set(NTA_CXXFLAGS_BASE "${NTA_INCLUDEFLAGS} ${NTA_PLATFORM_CXXFLAGS} -DHAVE_CONFI
 #
 # All executables and plugins are linked with these flags
 #
-set(NTA_LINKFLAGS "${NTA_PLATFORM_LINKFLAGS} ${NTA_PLATFORM_LIBS} -L${REPOSITORY_DIR}/lib -L${REPOSITORY_DIR}/extensions/core/external/${NTA_PLATFORM_OS}/lib -L${REPOSITORY_DIR}/external/${NTA_PLATFORM_OS}/lib")
+set(NTA_LINKFLAGS "${NTA_PLATFORM_LINKFLAGS} ${NTA_PLATFORM_LIBS} -L${PROJECT_BUILD_LIBRARIES_DIR} -L${REPOSITORY_DIR}/extensions/core/external/${NTA_PLATFORM_OS}/lib -L${REPOSITORY_DIR}/external/${NTA_PLATFORM_OS}/lib")
 
 message(STATUS "Options:")
 
@@ -702,7 +707,7 @@ if(NTA_PYTHON_SUPPORT)
 
   set(NTA_LINKFLAGS_PYEMBED "${NTA_PLATFORM_LINKFLAGS_PYEMBED} ${NTA_LINKFLAGS_PY}")
 
-  set(NTA_LINKFLAGS_PYMODULE "${NTA_PLATFORM_LINKFLAGS_PYMODULE} ${NTA_LINKFLAGS_PY} ${NTA_PLATFORM_LIBS} -L${REPOSITORY_DIR}/lib -L${REPOSITORY_DIR}/external/${NTA_PLATFORM_OS}/lib")
+  set(NTA_LINKFLAGS_PYMODULE "${NTA_PLATFORM_LINKFLAGS_PYMODULE} ${NTA_LINKFLAGS_PY} ${NTA_PLATFORM_LIBS} -L${PROJECT_BUILD_LIBRARIES_DIR} -L${REPOSITORY_DIR}/external/${NTA_PLATFORM_OS}/lib")
 
 endif()
 
@@ -727,7 +732,7 @@ set(NTA_CXXFLAGS "${NTA_CXXFLAGS_BASE} ${NTA_CXXFLAGS_OPTIMIZATION}")
 # on lang/py/support and lang/py/engine_internal depends on nta.
 #
 set(LIB_STATIC_SUPPORT py_support)
-generate_static_library(${LIB_STATIC_SUPPORT} "${REPOSITORY_DIR}/extensions/py_support" "${REPOSITORY_DIR}/temp/lib" "${NTA_CXXFLAGS}")
+generate_static_library(${LIB_STATIC_SUPPORT} "${REPOSITORY_DIR}/extensions/py_support" "${PROJECT_BUILD_TEMP_DIR}/lib" "${NTA_CXXFLAGS}")
 
 #
 # LibNupicCore
@@ -753,7 +758,7 @@ set(LIBRARIES
   ${LIB_STATIC_SUPPORT}
   ${LIB_STATIC_NUPICCORE}
 )
-generate_executable(${EXECUTABLE_HTMTEST} "${REPOSITORY_DIR}/extensions/htmtest" "${REPOSITORY_DIR}/bin" "${NTA_CXXFLAGS}" "${NTA_LINKFLAGS}" "${LIBRARIES}")
+generate_executable(${EXECUTABLE_HTMTEST} "${REPOSITORY_DIR}/extensions/htmtest" "${PROJECT_BUILD_BINARIES_DIR}" "${NTA_CXXFLAGS}" "${NTA_LINKFLAGS}" "${LIBRARIES}")
 
 #
 # LibCppRegion
@@ -769,7 +774,7 @@ set(PROJECT_LIBRARIES
 set(EXTERNAL_LIBRARIES
   ${PYTHON_LIBRARY}
 )
-generate_dynamic_library(${LIB_DYNAMIC_CPPREGION} "${REPOSITORY_DIR}/extensions/cpp_region" "${REPOSITORY_DIR}/lib" "${NTA_CXXFLAGS}" "${NTA_LINKFLAGS} ${NTA_LINKFLAGS_PYEMBED}" "${PROJECT_LIBRARIES}" "${EXTERNAL_LIBRARIES}")
+generate_dynamic_library(${LIB_DYNAMIC_CPPREGION} "${REPOSITORY_DIR}/extensions/cpp_region" "${PROJECT_BUILD_LIBRARIES_DIR}" "${NTA_CXXFLAGS}" "${NTA_LINKFLAGS} ${NTA_LINKFLAGS_PYEMBED}" "${PROJECT_LIBRARIES}" "${EXTERNAL_LIBRARIES}")
 
 if(NTA_PYTHON_SUPPORT)
   # This script is generated by swig.
@@ -873,15 +878,15 @@ add_custom_target(tests_run_all
                   COMMENT "Python tests + swarming (requires DB)")
 
 add_custom_target(tests_pyhtm
-                  COMMAND ${REPOSITORY_DIR}/bin/testpyhtm
+                  COMMAND ${PROJECT_BUILD_BINARIES_DIR}/testpyhtm
                   COMMENT "Basic tests in Python")
 
 add_custom_target(tests_cpphtm
-                  COMMAND ${REPOSITORY_DIR}/bin/testcpphtm
+                  COMMAND ${PROJECT_BUILD_BINARIES_DIR}/testcpphtm
                   COMMENT "Basic tests in C++")
 
 add_custom_target(tests_everything
-                  COMMAND ${REPOSITORY_DIR}/bin/testeverything
+                  COMMAND ${PROJECT_BUILD_BINARIES_DIR}/testeverything
                   COMMENT "C++ unit tests")
 
 # Tests_all just calls other targets
@@ -897,16 +902,16 @@ add_custom_target(tests_all
 #
 add_custom_target(distclean
                   # Clean '/build/release' and build/temp
-                  COMMAND ${CMAKE_COMMAND} -E remove_directory ${REPOSITORY_DIR}/include
-                  COMMAND ${CMAKE_COMMAND} -E remove_directory ${REPOSITORY_DIR}/lib
-                  COMMAND ${CMAKE_COMMAND} -E remove_directory ${REPOSITORY_DIR}/bin
-                  COMMAND ${CMAKE_COMMAND} -E remove_directory ${REPOSITORY_DIR}/temp
+                  COMMAND ${CMAKE_COMMAND} -E remove_directory ${PROJECT_BUILD_INCLUDE_DIR}
+                  COMMAND ${CMAKE_COMMAND} -E remove_directory ${PROJECT_BUILD_LIBRARIES_DIR}
+                  COMMAND ${CMAKE_COMMAND} -E remove_directory ${PROJECT_BUILD_BINARIES_DIR}
+                  COMMAND ${CMAKE_COMMAND} -E remove_directory ${PROJECT_BUILD_TEMP_DIR}
                   # recreate folders
-                  COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/include
-                  COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/lib
-                  COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/bin
-                  COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/temp/lib
-                  COMMAND ${CMAKE_COMMAND} -E make_directory ${REPOSITORY_DIR}/temp/obj
+                  COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_INCLUDE_DIR}
+                  COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_LIBRARIES_DIR}
+                  COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_BINARIES_DIR}
+                  COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_TEMP_DIR}/lib
+                  COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BUILD_TEMP_DIR}/obj
                   COMMENT "Cleaning temporary & release build files")
 
 # Just to separate from result message
