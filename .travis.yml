@@ -15,7 +15,7 @@ compiler:
 env:
   global:
     - NUPIC=$TRAVIS_BUILD_DIR
-    - NTA=$HOME/nta/eng
+    - NTA=$NUPIC
     - PATH=$TRAVIS_BUILD_DIR/python/bin:$PATH
   matrix:
     - PY_VER=2.7
