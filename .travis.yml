@@ -104,7 +104,6 @@ install:
   - "if [ $TRAVIS_OS_NAME = 'linux' ]; then PYTHON=`which python$PY_VER` cmake $NUPIC -DPYTHON_LIBRARY=/usr/lib/libpython$PY_VER.so -DPROJECT_BUILD_RELEASE_DIR:STRING=$NTA; fi"
   - "make -j3"
   - "cd"
-  - "if [ $TRAVIS_OS_NAME = 'linux' ] && [ $PY_VER = '2.7' ] && [ $CC = 'clang' ]; then pip install coveralls; fi"
 
 script:
   - "cd $TRAVIS_BUILD_DIR/build/scripts"
@@ -133,4 +132,5 @@ script:
   - "python$PY_VER $NUPIC/examples/tp/tp_test.py"
 
 after_success:
+  - "if [ $TRAVIS_OS_NAME = 'linux' ] && [ $PY_VER = '2.7' ] && [ $CC = 'clang' ]; then pip install coveralls; fi"
   - "if [ $TRAVIS_OS_NAME = 'linux' ] && [ $PY_VER = '2.7' ] && [ $CC = 'clang' ]; then coveralls debug; fi"
