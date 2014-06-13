@@ -22,5 +22,5 @@ script:
   - git rev-parse --abbrev-ref HEAD
 
 after_success:
-  - pip install coveralls --user
+  - sudo pip install coveralls
   - coveralls
