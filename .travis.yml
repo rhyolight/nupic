@@ -18,9 +18,9 @@ env:
   matrix:
     - PY_VER=2.7
 
-
-install:
+script:
   - git rev-parse --abbrev-ref HEAD
+
+after_success:
   - pip install coveralls
   - coveralls
-
