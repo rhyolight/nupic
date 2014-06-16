@@ -17,7 +17,8 @@ repositoryDir = os.getcwd()
 # which will add '-j3' option to Make commandline
 cmakeOptions = ""
 makeOptions = ""
-installOptions = ""
+setupOptions = ""
+mustBuildExtensions = False
 for arg in sys.argv:
   if ("cmake_options" in arg) or ("make_options" in arg):
     (option, _, rhs) = arg.partition("=")
@@ -26,7 +27,9 @@ for arg in sys.argv:
     if option[0] == "--make_options":
       makeOptions = rhs
   elif (not "setup.py" in arg):
-    installOptions += arg + " "
+    if ("build" in arg) or ("install" in arg):
+      mustBuildExtensions = True
+    setupOptions += arg + " "
 
 
 def getVariable(configFile, variable):
@@ -56,7 +59,7 @@ def findPackages(repositoryDir):
   return packages
 
 
-def build_nupic():
+def build_extensions_nupic():
   """
   CMake-specific build operations
   """
@@ -79,12 +82,12 @@ def build_nupic():
     sys.exit("Unable to build the library!")
 
 
-def install_nupic():
+def setup_nupic():
   """
-  Package install operations
+  Package setup operations
   """
   
-  # Install library
+  # Setup library
   os.chdir(repositoryDir)
   setup(
     name = 'nupic',
@@ -120,6 +123,7 @@ For more information, see numenta.org or the NuPIC wiki (https://github.com/nume
   )
 
 
-# Build and install NuPIC
-build_nupic()
-install_nupic()
+# Build and setup NuPIC
+if mustBuildExtensions:
+  build_extensions_nupic()
+setup_nupic()
