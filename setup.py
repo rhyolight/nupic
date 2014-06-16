@@ -91,7 +91,7 @@ def install_nupic():
     version = getVariable(repositoryDir + "/nupic/__init__.py", "__version__"),
     packages = findPackages(repositoryDir),
     package_data = {
-      'nupic': ['README.md', 'LICENSE.txt', '*.so', '*.dll'],
+      'nupic': ['README.md', 'LICENSE.txt', '*.so', '*.dll', '*.dylib'],
       'nupic.bindings': ['_*.so', '_*.dll'],
       'nupic.data': ['*.json'],
       'nupic.frameworks.opf.exp_generator': ['*.json', '*.tpl'],
