@@ -858,6 +858,39 @@ endif()
 install(CODE "execute_process(COMMAND ${PYTHON} setup.py develop
                               WORKING_DIRECTORY ${REPOSITORY_DIR})")
 
+# Copy bindings to $NTA after build
+# This is palliative and should be removed after "Pip Installable" PR being merged!
+add_custom_command(TARGET _engine_internal POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy ${REPOSITORY_DIR}/nupic/bindings/engine_internal.py ${PYTHON_SITE_PACKAGES_DIR}/nupic/bindings/engine_internal.py
+                   COMMAND ${CMAKE_COMMAND} -E copy ${REPOSITORY_DIR}/nupic/bindings/_engine_internal.so ${PYTHON_SITE_PACKAGES_DIR}/nupic/bindings/_engine_internal.so)
+add_custom_command(TARGET _math POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy ${REPOSITORY_DIR}/nupic/bindings/math.py ${PYTHON_SITE_PACKAGES_DIR}/nupic/bindings/math.py
+                   COMMAND ${CMAKE_COMMAND} -E copy ${REPOSITORY_DIR}/nupic/bindings/_math.so ${PYTHON_SITE_PACKAGES_DIR}/nupic/bindings/_math.so)
+add_custom_command(TARGET _algorithms POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy ${REPOSITORY_DIR}/nupic/bindings/algorithms.py ${PYTHON_SITE_PACKAGES_DIR}/nupic/bindings/algorithms.py
+                   COMMAND ${CMAKE_COMMAND} -E copy ${REPOSITORY_DIR}/nupic/bindings/_algorithms.so ${PYTHON_SITE_PACKAGES_DIR}/nupic/bindings/_algorithms.so)
+add_custom_command(TARGET _iorange POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy ${REPOSITORY_DIR}/nupic/bindings/iorange.py ${PYTHON_SITE_PACKAGES_DIR}/nupic/bindings/iorange.py
+                   COMMAND ${CMAKE_COMMAND} -E copy ${REPOSITORY_DIR}/nupic/bindings/_iorange.so ${PYTHON_SITE_PACKAGES_DIR}/nupic/bindings/_iorange.so)
+
+# Copy the pieces of nupic that we want
+copy_directory(${REPOSITORY_DIR}/nupic ${PYTHON_SITE_PACKAGES_DIR}/nupic)
+
+# Copy examples
+copy_directory(${REPOSITORY_DIR}/examples/prediction ${PROJECT_BUILD_RELEASE_DIR}/share/prediction)
+copy_directory(${REPOSITORY_DIR}/examples/opf ${PROJECT_BUILD_RELEASE_DIR}/share/opf)
+
+# Copy testing codes
+copy_directory(${REPOSITORY_DIR}/resources ${PROJECT_BUILD_RELEASE_DIR}/share/test/data)
+copy_directory(${REPOSITORY_DIR}/tests ${PROJECT_BUILD_RELEASE_DIR}/tests)
+copy_directory(${REPOSITORY_DIR}/scripts ${PROJECT_BUILD_RELEASE_DIR}/scripts)
+
+# Copy miscellaneous files
+copy_directory(${REPOSITORY_DIR}/extensions/core/external/licenses ${PROJECT_BUILD_RELEASE_DIR}/share/doc/licenses)
+copy_directory(${REPOSITORY_DIR}/external/licenses ${PROJECT_BUILD_RELEASE_DIR}/share/doc/licenses)
+copy_file(${REPOSITORY_DIR}/config/default/nupic-default.xml ${PROJECT_BUILD_RELEASE_DIR}/config/default/nupic-default.xml)
+copy_file(${REPOSITORY_DIR}/config/default/nupic-logging.conf ${PROJECT_BUILD_RELEASE_DIR}/config/default/nupic-logging.conf)
+
 
 ############################################################################################################################
 ###                                                                                                                      ###
