@@ -22,9 +22,9 @@ mustBuildExtensions = False
 for arg in sys.argv:
   if ("cmake_options" in arg) or ("make_options" in arg):
     (option, _, rhs) = arg.partition("=")
-    if option[0] == "--cmake_options":
+    if option == "--cmake_options":
       cmakeOptions = rhs
-    if option[0] == "--make_options":
+    if option == "--make_options":
       makeOptions = rhs
   elif (not "setup.py" in arg):
     if ("build" in arg) or ("install" in arg):
