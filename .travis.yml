@@ -9,7 +9,7 @@ os:
 
 compiler:
   - clang
-  - gcc
+#  - gcc
 
 env:
   global:
@@ -17,7 +17,7 @@ env:
     - PATH=$TRAVIS_BUILD_DIR/python/bin:$PATH
   matrix:
     - PY_VER=2.7
-    - PY_VER=2.6
+#    - PY_VER=2.6
 
 matrix:
   # This excludes OSX builds from the build matrix for gcc and Python 2.6
@@ -29,12 +29,12 @@ matrix:
 
 # Successful builds are archived and uploaded to S3 for regression testing.
 before_deploy:
+  - "ls /Users/travis/Library/Python/$PY_VER/lib/python/site-packages/"
   # We need to move the pip requirements into the archived directory so they can
   # be installed for regression tests
   - cp ${TRAVIS_BUILD_DIR}/external/common/requirements.txt ${NUPIC}/.
   # This is the directory we'll be archiving.
   - mkdir ${TRAVIS_BUILD_DIR}/build/archive
-  # Tar up the release directory
 
 deploy:
   provider: s3
