@@ -105,9 +105,6 @@ install:
   # Show nupic installation folder by trying import nupic, if works, it prints the absolute path of nupic.__file__, which the installation folder itself.
   - "python -c 'import sys;import os;import nupic;sys.stdout.write(os.path.abspath(os.path.join(nupic.__file__, \"../..\")))'"
 
-after_install:
-  - "ls /Users/travis/Library/Python/$PY_VER/lib/python/site-packages/"
-
 script:
   - "cd $TRAVIS_BUILD_DIR/build/scripts"
   # legacy binary tests
@@ -136,6 +133,9 @@ script:
     # examples/tp
   - "python$PY_VER $NUPIC/examples/tp/hello_tp.py"
   - "python$PY_VER $NUPIC/examples/tp/tp_test.py"
+
+after_script:
+  - "ls /Users/travis/Library/Python/$PY_VER/lib/python/site-packages/"
 
 after_success:
   - "if [ $TRAVIS_OS_NAME = 'linux' ] && [ $PY_VER = '2.7' ] && [ $CC = 'clang' ]; then pip install python-coveralls; fi"
