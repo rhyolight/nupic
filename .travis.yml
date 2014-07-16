@@ -29,7 +29,6 @@ matrix:
 
 # Successful builds are archived and uploaded to S3 for regression testing.
 before_deploy:
-  - "ls /Users/travis/Library/Python/$PY_VER/lib/python/site-packages/"
   # We need to move the pip requirements into the archived directory so they can
   # be installed for regression tests
   - cp ${TRAVIS_BUILD_DIR}/external/common/requirements.txt ${NUPIC}/.
@@ -105,6 +104,9 @@ install:
   - "python$PY_VER setup.py install --user"
   # Show nupic installation folder by trying import nupic, if works, it prints the absolute path of nupic.__file__, which the installation folder itself.
   - "python -c 'import sys;import os;import nupic;sys.stdout.write(os.path.abspath(os.path.join(nupic.__file__, \"../..\")))'"
+
+after_install:
+  - "ls /Users/travis/Library/Python/$PY_VER/lib/python/site-packages/"
 
 script:
   - "cd $TRAVIS_BUILD_DIR/build/scripts"
