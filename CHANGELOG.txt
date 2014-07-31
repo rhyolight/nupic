@@ -1,0 +1,9 @@
+# Changelog
+
+## 0.1.1
+
+* [`#1097`](https://github.com/numenta/pycept/issues/1097) Bumping version for pypi deployment testing.
+
+## 0.1.0
+
+* Initial release
