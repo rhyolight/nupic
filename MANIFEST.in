@@ -9,3 +9,4 @@ recursive-include nupic/frameworks/opf/jsonschema *.json
 recursive-include nupic/support/resources/images *.png *.gif *.ico *.graffle
 recursive-include nupic/swarming/jsonschema *.json
 recursive-include external *
+recursive-include extensions/py_support *
