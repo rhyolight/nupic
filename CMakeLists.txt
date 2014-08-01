@@ -141,6 +141,14 @@ macro(get_source_groups src_dir)
   set(SOURCE_RETURNED)
   set(ITEMS_RETURNED)
 
+
+  message(STATUS "===PYPI DEBUG get_source_groups===")
+  message(STATUS "get_source_groups = ${get_source_groups}")
+  message(STATUS "src_dir = ${src_dir}")
+  message(STATUS "===PYPI DEBUG get_source_groups===")
+
+
+
   # Add root files as a blank source group
   file(GLOB src_files
     ${src_dir}/*.cpp
@@ -149,6 +157,11 @@ macro(get_source_groups src_dir)
   )
   if(src_files)
     set(SOURCE_RETURNED ${SOURCE_RETURNED} ${src_files})
+
+    message(STATUS "===PYPI DEBUG get_source_groups===")
+    message(STATUS "SOURCE_RETURNED = ${SOURCE_RETURNED}")
+    message(STATUS "===PYPI DEBUG get_source_groups===")
+
     source_group("" FILES ${src_files})
   endif()
 
@@ -164,6 +177,11 @@ macro(get_source_groups src_dir)
       )
       get_filename_component(src_group ${dir} NAME)
       set(SOURCE_RETURNED ${SOURCE_RETURNED} ${src_files})
+
+      message(STATUS "===PYPI DEBUG get_source_groups===")
+      message(STATUS "SOURCE_RETURNED = ${SOURCE_RETURNED}")
+      message(STATUS "===PYPI DEBUG get_source_groups===")
+
       source_group(${src_group} FILES ${src_files})
     endforeach()
   endif()
@@ -173,22 +191,16 @@ endmacro()
 macro(generate_executable name src_dir output_dir cxx_flags link_flags libraries)
 
   # DEBUG
-  message(STATUS "===PYPI DEBUG===")
-  message(STATUS "name = ${name}")
-  message(STATUS "src_dir = ${src_dir}")
-  message(STATUS "output_dir = ${output_dir}")
-  message(STATUS "cxx_flags = ${cxx_flags}")
-  message(STATUS "link_flags = ${link_flags}")
-  message(STATUS "libraries = ${libraries}")
-  message(STATUS "===PYPI DEBUG===")
+  message(STATUS "===PYPI DEBUG generate_executable===")
+  message(STATUS "SOURCE_RETURNED = ${SOURCE_RETURNED}")
+  message(STATUS "===PYPI DEBUG generate_executable===")
 
   get_source_groups(${src_dir})
-  add_executable(${name}
-    ${SOURCE_RETURNED}
-  )
-  target_link_libraries(${name}
-    ${libraries}
-  )
+
+  add_executable(${name} ${SOURCE_RETURNED})
+
+  target_link_libraries(${name} ${libraries})
+
   set_target_properties(${name} PROPERTIES COMPILE_FLAGS "${cxx_flags}")
   set_target_properties(${name} PROPERTIES LINK_FLAGS "${link_flags}")
   set_target_properties(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${output_dir})
