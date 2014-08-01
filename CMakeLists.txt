@@ -528,6 +528,10 @@ execute_process(COMMAND ${SWIG_EXECUTABLE} -version OUTPUT_VARIABLE SWIG_VERSION
 # DEBUG
 message(STATUS "Swig details:")
 message(STATUS "  Version: ${SWIG_VERSION}")
+message(STATUS "Swig executable:")
+message(STATUS "  Version: ${SWIG_EXECUTABLE}")
+message(STATUS "Swig dir:")
+message(STATUS "  Version: ${SWIG_DIR}")
 
 string(REGEX REPLACE ".*SWIG Version[^0-9.]*\([0-9.]+\).*" "\\1" SWIG_VERSION ${SWIG_VERSION})
 include(${CMAKE_ROOT}/Modules/UseSWIG.cmake)
