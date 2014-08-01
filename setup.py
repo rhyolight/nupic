@@ -117,7 +117,7 @@ def setupNupic():
       "Programming Language :: Python :: 2",
       "License :: OSI Approved :: GNU General Public License (GPL)",
       "Operating System :: OS Independent",
-      "Development Status :: 4 - Beta",
+      "Development Status :: 5 - Production/Stable",
       "Environment :: Console",
       "Intended Audience :: Science/Research",
       "Topic :: Scientific/Engineering :: Artificial Intelligence"
