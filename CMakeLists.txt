@@ -171,6 +171,17 @@ endmacro()
 
 # This macro generates a executable
 macro(generate_executable name src_dir output_dir cxx_flags link_flags libraries)
+
+  # DEBUG
+  message(STATUS "===PYPI DEBUG===")
+  message(STATUS "name = ${name}")
+  message(STATUS "src_dir = ${src_dir}")
+  message(STATUS "output_dir = ${output_dir}")
+  message(STATUS "cxx_flags = ${cxx_flags}")
+  message(STATUS "link_flags = ${link_flags}")
+  message(STATUS "libraries = ${libraries}")
+  message(STATUS "===PYPI DEBUG===")
+
   get_source_groups(${src_dir})
   add_executable(${name}
     ${SOURCE_RETURNED}
