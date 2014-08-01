@@ -524,6 +524,11 @@ execute_process(COMMAND ${PYTHON} -c "import sys;import numpy;sys.stdout.write(n
 set(SWIG_EXECUTABLE "${REPOSITORY_DIR}/external/${NTA_PLATFORM_OS}/bin/swig")
 set(SWIG_DIR "${REPOSITORY_DIR}/external/common/share/swig/1.3.36")
 execute_process(COMMAND ${SWIG_EXECUTABLE} -version OUTPUT_VARIABLE SWIG_VERSION)
+
+# DEBUG
+message(STATUS "Swig details:")
+message(STATUS "  Version: ${SWIG_VERSION}")
+
 string(REGEX REPLACE ".*SWIG Version[^0-9.]*\([0-9.]+\).*" "\\1" SWIG_VERSION ${SWIG_VERSION})
 include(${CMAKE_ROOT}/Modules/UseSWIG.cmake)
 
