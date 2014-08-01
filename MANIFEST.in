@@ -7,3 +7,4 @@ recursive-include nupic/frameworks/opf/exp_generator *.json *.tpl
 recursive-include nupic/frameworks/opf/jsonschema *.json
 recursive-include nupic/support/resources/images *.png *.gif *.ico *.graffle
 recursive-include nupic/swarming/jsonschema *.json
+recursive-include nupic/external *
