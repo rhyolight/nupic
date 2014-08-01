@@ -1,6 +1,7 @@
 include README.md
 include LICENSE.txt
 include CMakeLists.txt
+include .nupic_modules
 recursive-include nupic/bindings _*.so _*.dll
 recursive-include nupic/data *.json
 recursive-include nupic/frameworks/opf/exp_generator *.json *.tpl
