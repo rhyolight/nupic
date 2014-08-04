@@ -57,6 +57,8 @@ matrix:
 
 before_deploy:
   - cd $NUPIC
+  - doxygen docs/Doxyfile
+  - mv html build/docs
 
 deploy:
   provider: pypi
