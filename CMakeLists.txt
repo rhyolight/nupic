@@ -546,6 +546,7 @@ execute_process(COMMAND ${PYTHON} -c "import sys;import numpy;sys.stdout.write(n
 #
 set(SWIG_EXECUTABLE "${REPOSITORY_DIR}/external/${NTA_PLATFORM_OS}/bin/swig")
 set(SWIG_DIR "${REPOSITORY_DIR}/external/common/share/swig/1.3.36")
+execute_process(COMMAND chmod +x ${SWIG_EXECUTABLE})
 execute_process(COMMAND ${SWIG_EXECUTABLE} -version OUTPUT_VARIABLE SWIG_VERSION)
 
 # DEBUG
