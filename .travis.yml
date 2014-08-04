@@ -57,6 +57,7 @@ matrix:
 
 before_deploy:
   - cd $NUPIC
+  - sudo apt-get doxygen
   - doxygen docs/Doxyfile
   - mv html build/docs
 
