@@ -80,4 +80,5 @@ install:
 
 script:
   - "cd $TRAVIS_BUILD_DIR/build/scripts"
-  - python $NUPIC/scripts/run_tests.py $NUPIC/tests/unit/py2/nupic/algorithms/anomaly_likelihood_jeff_test.py
+  - make python_unit_tests
+  # - python $NUPIC/scripts/run_tests.py $NUPIC/tests/unit/py2/nupic/algorithms/anomaly_likelihood_jeff_test.py
