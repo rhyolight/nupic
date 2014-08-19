@@ -80,6 +80,4 @@ install:
 
 script:
   - "cd $TRAVIS_BUILD_DIR/build/scripts"
-  # legacy binary tests
-  - "make tests_pyhtm"
-  - ./scripts/run_tests.py tests/unit/py2/nupic/algorithms/anomaly_likelihood_jeff_test.py
+  - python $NUPIC/scripts/run_tests.py $NUPIC/tests/unit/py2/nupic/algorithms/anomaly_likelihood_jeff_test.py
