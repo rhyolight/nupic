@@ -72,6 +72,7 @@ class ArtificialAnomalyTest(TestCaseBase):
     """
     if origData is None:
       origData = []
+    xxx = {3, 7, 10}
     # Get a list of dates
     if len(origData) > 0:
       lastDate = origData[-1][0]
