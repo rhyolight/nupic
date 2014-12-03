@@ -45,16 +45,17 @@ function (read_variable_from_file file_content variable value)
   endforeach()
 endfunction()
 
-function (unpack_nupic_core source_path package_file)
+function (unpack_nupic_core nupic_source_path package_file)
   string(REGEX REPLACE "\\.tar\\.gz" "" UNPACK_DIR "${package_file}")
   message(STATUS "Unpacking ${package_file} into ${UNPACK_DIR}...")
-  set(RELEASE_DIR "${source_path}/build/release")
-  file(REMOVE_RECURSE "${source_path}/build/release/bin")
-  file(REMOVE_RECURSE "${source_path}/build/release/include")
-  file(REMOVE_RECURSE "${source_path}/build/release/lib")
+  set(RELEASE_DIR "${nupic_source_path}/build/release")
+  if (EXISTS "${RELEASE_DIR}")
+    file(REMOVE_RECURSE "${RELEASE_DIR}")
+  endif()
+  file(MAKE_DIRECTORY "${RELEASE_DIR}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E tar xzf "${package_file}"
-    WORKING_DIRECTORY "${source_path}/build/release"
+    WORKING_DIRECTORY "${PROJECT_BUILD_TEMP_DIR}"
   )
   file(RENAME "${UNPACK_DIR}/bin" "${RELEASE_DIR}/bin")
   file(RENAME "${UNPACK_DIR}/include" "${RELEASE_DIR}/include")
@@ -133,6 +134,9 @@ execute_process(COMMAND ${PYTHON} -c "import sys;import numpy;sys.stdout.write(n
                 OUTPUT_VARIABLE NUMPY_VERSION)
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+# For temporary storage of nupic.core downloads and SWIG.
+set(PROJECT_BUILD_TEMP_DIR ${PROJECT_SOURCE_DIR}/temp)
+
 
 if("${NUPIC_CORE}" STREQUAL "")
   # User did not specify NUPIC_CORE binary location, assume relative to nupic
@@ -199,7 +203,16 @@ if(FETCH_NUPIC_CORE)
   read_variable_from_file("${MODULES_FILE_CONTENT}" "NUPIC_CORE_COMMITISH" NUPIC_CORE_COMMITISH)
 
   set(NUPIC_CORE_REMOTE_URL "${NUPIC_CORE_BUCKET}/nupic_core-${NUPIC_CORE_COMMITISH}-${PLATFORM}${BITNESS}.tar.gz")
-  set(NUPIC_CORE_LOCAL_PACKAGE "${NUPIC_CORE}/nupic_core-${NUPIC_CORE_COMMITISH}-${PLATFORM}${BITNESS}.tar.gz")
+
+  message(STATUS "${PROJECT_BUILD_TEMP_DIR}")
+
+  # Set up a temporary directory to download nupic.core package into and store 
+  # nupic.core packages for subsequent builds.
+  if (NOT(EXISTS "${PROJECT_BUILD_TEMP_DIR}"))
+    file(MAKE_DIRECTORY "${PROJECT_BUILD_TEMP_DIR}")
+  endif()
+
+  set(NUPIC_CORE_LOCAL_PACKAGE "${PROJECT_BUILD_TEMP_DIR}/nupic_core-${NUPIC_CORE_COMMITISH}-${PLATFORM}${BITNESS}.tar.gz")
 
   if(EXISTS "${NUPIC_CORE_LOCAL_PACKAGE}")
     message(STATUS "Target nupic.core package already exists at ${NUPIC_CORE_LOCAL_PACKAGE}.")
@@ -346,7 +359,6 @@ set_target_properties(${LIB_DYNAMIC_CPPREGION}
 #
 set(SWIG_EXECUTABLE "${PROJECT_SOURCE_DIR}/external/${PLATFORM}${BITNESS}/bin/swig" CACHE STRING "Swig executable")
 set(SWIG_DIR "${PROJECT_SOURCE_DIR}/external/common/share/swig/3.0.2" CACHE STRING "Swig dir")
-set(PROJECT_BUILD_TEMP_DIR ${PROJECT_SOURCE_DIR}/temp)
 # CMAKE_CURRENT_BINARY_DIR is used by swig module for put wrappers on, so don't erase this line!
 set(CMAKE_CURRENT_BINARY_DIR ${PROJECT_BUILD_TEMP_DIR})
 set(NTA_INCLUDEFLAGS "${NTA_INCLUDEFLAGS} -I${PROJECT_SOURCE_DIR}")
