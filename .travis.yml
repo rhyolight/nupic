@@ -37,7 +37,7 @@ deploy:
   local-dir: "dist"
   upload-dir: "numenta/nupic/${TRAVIS_COMMIT}"
   skip_cleanup: true
-  # Only deploy on master from one build job: linux, clang
+  # Only deploy on master from one build job: linux/clang
   on:
     branch: master
     condition:

@@ -2,7 +2,7 @@ import shutil
 import sys
 import os
 import subprocess
-from setuptools import setup
+from setuptools import setup, Extension
 import py_compile
 
 """
@@ -105,6 +105,32 @@ def buildExtensionsNupic():
   if returnCode != 0:
     sys.exit("Unable to build the library!")
 
+nupicCoreReleaseDir = os.path.join(
+  repositoryDir, "extensions/core/build/release"
+)
+nupicCoreExtension = Extension(
+  "nupic.core",
+  sources = [],
+  include_dirs = [
+    os.path.join(nupicCoreReleaseDir, "include")
+  ],
+  libaries = [
+    "libapr", "libaprutil", "libcapnp",
+    "libcapnp-rpc", "libcapnpc", "libgtest",
+    "libkj", "libkj-async", "libnupic_core",
+    "libnupic_core_solo", "libyaml", "libyaml-cpp",
+    "libz"
+  ],
+  libary_dirs = [
+    os.path.join(nupicCoreReleaseDir, "lib")
+  ]
+  # Don't think I really need these.
+  # extra_objects = [
+  #   os.path.join(nupicCoreReleaseDir, "bin/helloregion"),
+  #   os.path.join(nupicCoreReleaseDir, "bin/testcpphtm"),
+  #   os.path.join(nupicCoreReleaseDir, "bin/unit_tests")
+  # ]
+)
 
 def setupNupic():
   """
@@ -135,6 +161,7 @@ def setupNupic():
         ]
       )
     ],
+    ext_modules = [nupicCoreExtension],
     include_package_data = True,
     description = "Numenta Platform for Intelligent Computing",
     author="Numenta",
