@@ -446,6 +446,117 @@ class Setup:
            self.repositoryDir + "/extensions/core"
 
 
+  def buildNupicCoreFromGitClone(self, nupicCoreCommitish,
+                                 nupicCoreLocalPackage, nupicCoreReleaseDir,
+                                 nupicCoreRemote, nupicCoreSourceDir):
+    print ("Building nupic.core from local checkout "
+           + nupicCoreSourceDir + "...")
+    # Remove the local package file, which didn't get populated due to the
+    # download failure.
+    if os.path.exists(nupicCoreLocalPackage):
+      os.remove(nupicCoreLocalPackage)
+
+    # Get nupic.core dependency through git.
+    if not os.path.exists(nupicCoreSourceDir + "/.git"):
+      # There's not a git repo in nupicCoreSourceDir, so we can blow the
+      # whole directory away and clone nupic.core there.
+      shutil.rmtree(nupicCoreSourceDir, True)
+      os.makedirs(nupicCoreSourceDir)
+      cloneCommand = ["git", "clone", nupicCoreRemote, nupicCoreSourceDir, "--depth=50"]
+      print " ".join(cloneCommand)
+      process = subprocess.Popen(cloneCommand,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+      process.communicate()
+      if process.returncode != 0:
+        raise Exception("Fatal Error: Unable to clone %s into %s"
+                        % (nupicCoreRemote, nupicCoreSourceDir))
+    else:
+      # Fetch if already cloned.
+      gitFetchCmd = ["git", "fetch", nupicCoreRemote]
+      print " ".join(gitFetchCmd)
+      process = subprocess.Popen(gitFetchCmd,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 cwd=nupicCoreSourceDir)
+      process.communicate()
+      if process.returncode != 0:
+        raise Exception("Fatal Error: Unable to fetch %s"
+                        % nupicCoreRemote)
+
+    # Get the exact SHA we need for nupic.core.
+    gitResetCmd = ["git", "reset", "--hard", nupicCoreCommitish]
+    print " ".join(gitResetCmd)
+    process = subprocess.Popen(gitResetCmd,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               cwd=nupicCoreSourceDir)
+    process.communicate()
+    if process.returncode != 0:
+      raise Exception("Fatal Error: Unable to checkout %s in %s"
+                      % (nupicCoreCommitish, nupicCoreSourceDir))
+
+    # Execute the Make scripts
+    process = subprocess.Popen(["git", "clean", "-fdx"],
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               cwd=nupicCoreSourceDir)
+    process.communicate()
+    if process.returncode != 0:
+      raise Exception(
+        "Fatal Error: Compiling 'nupic.core' library within %s failed."
+        % self.repositoryDir
+      )
+
+    # Build and set external libraries
+    print "Building 'nupic.core' library..."
+    makeWorkingDir = "%s/build/scripts" % nupicCoreSourceDir
+    # Clean 'build/scripts' subfolder at submodule folder
+    shutil.rmtree(nupicCoreSourceDir + "/build/scripts", True)
+    os.makedirs(nupicCoreSourceDir + "/build/scripts")
+    shutil.rmtree(nupicCoreReleaseDir, True)
+    # Generate the Make scripts
+    cmakeCmd = ["cmake",
+                "%s/src" % nupicCoreSourceDir,
+                "-DCMAKE_INSTALL_PREFIX=%s" % nupicCoreReleaseDir]
+    print " ".join(cmakeCmd)
+    process = subprocess.Popen(cmakeCmd,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               cwd=makeWorkingDir)
+    cmakeStdOut, cmakeStdErr = process.communicate()
+    if process.returncode != 0:
+      print cmakeStdOut
+      print cmakeStdErr
+      raise Exception(
+        "Fatal Error: cmake command failed in %s!"
+        % makeWorkingDir
+      )
+    else:
+      print "CMake complete."
+
+    # Execute the Make scripts
+    if "user-make-command" in self.options:
+      userMakeCommand = [self.options["user-make-command"]]
+    else:
+      userMakeCommand = ["make"]
+    userMakeCommand = userMakeCommand + ["install", "-j4"]
+    print " ".join(userMakeCommand)
+    process = subprocess.Popen(userMakeCommand,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               cwd=makeWorkingDir)
+    makeStdOut, makeStdErr = process.communicate()
+    if process.returncode != 0:
+      print makeStdOut
+      print makeStdErr
+      raise Exception(
+        "Fatal Error: make command failed in %s!"
+        % makeWorkingDir
+      )
+    else:
+      print "Make complete."
+    print "Done building nupic.core."
 
   def prepareNupicCore(self):
 
@@ -493,100 +604,13 @@ class Setup:
         # be cleaner with something like `python setup.py clean`.
 
         if not downloadSuccess:
-          print ("Building nupic.core from local checkout "
-                 + nupicCoreSourceDir + "...")
-          # Remove the local package file, which didn't get populated due to the
-          # download failure.
-          if os.path.exists(nupicCoreLocalPackage):
-            os.remove(nupicCoreLocalPackage)
-
-          # Get nupic.core dependency through git.
-          if not os.path.exists(nupicCoreSourceDir + "/.git"):
-            # There's not a git repo in nupicCoreSourceDir, so we can blow the
-            # whole directory away and clone nupic.core there.
-            shutil.rmtree(nupicCoreSourceDir, True)
-            os.makedirs(nupicCoreSourceDir)
-            cloneCommand = ("git clone " + nupicCoreRemote + " "
-                            + nupicCoreSourceDir)
-            process = subprocess.Popen(cloneCommand,
-              stdout=subprocess.PIPE,
-              stderr=subprocess.PIPE,
-              shell=True)
-            _, exitCode = process.communicate()
-            if exitCode != 0:
-              raise Exception("Fatal Error: Unable to clone %s into %s"
-                              % (nupicCoreRemote, nupicCoreSourceDir))
-          else:
-            # Fetch if already cloned.
-            process = subprocess.Popen("git fetch " + nupicCoreRemote,
-              stdout=subprocess.PIPE,
-              stderr=subprocess.PIPE,
-              shell=True,
-              cwd=nupicCoreSourceDir)
-            _, exitCode = process.communicate()
-            if exitCode != 0:
-              raise Exception("Fatal Error: Unable to fetch %s"
-                              % nupicCoreRemote)
-
-          # Get the exact SHA we need for nupic.core.
-          process = subprocess.Popen("git reset --hard " + nupicCoreCommitish,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=True,
-            cwd=nupicCoreSourceDir)
-          _, exitCode = process.communicate()
-          if exitCode != 0:
-            raise Exception("Fatal Error: Unable to checkout %s in %s"
-                            % (nupicCoreCommitish, nupicCoreSourceDir))
-
-          # Execute the Make scripts
-          process = subprocess.Popen("git clean -fdx",
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=True,
-            cwd=nupicCoreSourceDir)
-          _, exitCode = process.communicate()
-          if exitCode != 0:
-            raise Exception(
-              "Fatal Error: Compiling 'nupic.core' library within %s failed."
-              % self.repositoryDir
-            )
-
-          # Build and set external libraries
-          print "Building 'nupic.core' library..."
-
-          # Clean 'build/scripts' subfolder at submodule folder
-          shutil.rmtree(nupicCoreSourceDir + "/build/scripts", True)
-          os.makedirs(nupicCoreSourceDir + "/build/scripts")
-          shutil.rmtree(nupicCoreReleaseDir, True)
-          # Generate the Make scripts
-          cmakeCmd = "cmake %s/src -DCMAKE_INSTALL_PREFIX=%s" \
-                     % (nupicCoreSourceDir, nupicCoreReleaseDir)
-          process = subprocess.Popen(cmakeCmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=True,
-            cwd=nupicCoreSourceDir + "/build/scripts")
-          _, exitCode = process.communicate()
-
-          # Execute the Make scripts
-          if "user-make-command" in self.options:
-            userMakeCommand = self.options["user-make-command"]
-          else:
-            userMakeCommand = "make"
-          process = subprocess.Popen(userMakeCommand + " install -j3",
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=True,
-            cwd=nupicCoreSourceDir + "/build/scripts")
-          _, exitCode = process.communicate()
-          if exitCode != 0:
-            raise Exception(
-              "Fatal Error: Compiling 'nupic.core' library within %s failed."
-              % self.repositoryDir
-            )
-
-          print "Done building nupic.core."
+          print ("WARNING:\n\tRemote nupic.core download of %s failed!"
+                 "\n\tBuilding nupic.core locally from SHA: %s.\n"
+                 % (nupicCoreRemoteUrl, nupicCoreCommitish))
+          self.buildNupicCoreFromGitClone(nupicCoreCommitish,
+                                          nupicCoreLocalPackage,
+                                          nupicCoreReleaseDir, nupicCoreRemote,
+                                          nupicCoreSourceDir)
 
         else:
           self.unpackFile(nupicCoreLocalPackage,
@@ -628,13 +652,17 @@ class Setup:
     success = True
 
     if not silent:
-      print "Downloading from %s to %s" % (url, destFile);
+      print "Downloading from\n\t%s\nto\t%s.\n" % (url, destFile);
 
     destDir = os.path.dirname(destFile)
     if not os.path.exists(destDir):
       os.makedirs(destDir)
 
-    response = urllib2.urlopen(url)
+    try:
+      response = urllib2.urlopen(url)
+    except urllib2.URLError:
+      return False
+
     file = open(destFile, "wb")
 
     totalSize = response.info().getheader('Content-Length').strip()
