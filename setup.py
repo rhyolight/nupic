@@ -101,6 +101,7 @@ class Setup:
   """)
 
 
+
   def getCommandLineOptions(self):
 
     # optionDesc = [name, value, description]
@@ -156,6 +157,13 @@ class Setup:
     return optionsValues
 
 
+
+  def getCommandLineOption(self, name):
+    if name in self.options:
+      return self.options[name]
+
+
+
   def printOptions(self, optionsDesc):
     """
     Print command line options.
@@ -168,6 +176,7 @@ class Setup:
         optionUsage += "=[" + option[1] + "]"
       optionDesc = option[2]
       print "    " + optionUsage.ljust(30) + " = " + optionDesc
+
 
 
   def getPlatformInfo(self):
@@ -192,10 +201,12 @@ class Setup:
     return platform, bitness
 
 
+
   def skipPyCompile(self, file, cfile=None, dfile=None, doraise=False):
     filesToSkip = ["UnimportableNode.py"]
     if os.path.basename(file) not in filesToSkip:
       self.origPyCompile(file, cfile=cfile, dfile=dfile, doraise=doraise)
+
 
 
   def getVersion(self):
@@ -204,6 +215,7 @@ class Setup:
     """
     with open("VERSION", "r") as versionFile:
       return versionFile.read().strip()
+
 
 
   def getExtensionModules(self):
@@ -395,6 +407,7 @@ class Setup:
     return extensions
 
 
+
   def getStaticLibFile(self, libName):
     """
     Returns the default system name of a compiled static library.
@@ -406,24 +419,8 @@ class Setup:
       return libName + ".lib"
 
 
-  def prepareNupicCore(self):
 
-    if "nupic-core-dir" in self.options:
-      nupicCoreReleaseDir = self.options["nupic-core-dir"]
-    else:
-      nupicCoreReleaseDir = ""
-
-    if nupicCoreReleaseDir == "":
-      # User did not specify 'nupic.core' binary location, assume relative to
-      # nupic.
-      nupicCoreReleaseDir = self.repositoryDir \
-                            + "/extensions/core/build/release"
-      nupicCoreSourceDir = self.repositoryDir + "/extensions/core"
-      fetchNupicCore = True
-    else:
-      # User specified that they have their own nupic.core
-      fetchNupicCore = False
-
+  def extractNupicCoreTarget(self):
     # First, get the nupic.core SHA and remote location from local config.
     nupicConfig = {}
     if os.path.exists(self.repositoryDir + "/.nupic_config"):
@@ -438,8 +435,32 @@ class Setup:
       execfile(
         os.path.join(self.repositoryDir, ".nupic_modules"), {}, nupicConfig
       )
-    nupicCoreRemote = nupicConfig["NUPIC_CORE_REMOTE"]
-    nupicCoreCommitish = nupicConfig["NUPIC_CORE_COMMITISH"]
+    return nupicConfig["NUPIC_CORE_REMOTE"], nupicConfig["NUPIC_CORE_COMMITISH"]
+
+
+
+  # Returns nupic.core release directory and source directory in tuple.
+  def getDefaultNupicCoreDirectories(self):
+    # Default nupic.core location is relative to the NuPIC checkout.
+    return self.repositoryDir + "/extensions/core/build/release", \
+           self.repositoryDir + "/extensions/core"
+
+
+
+  def prepareNupicCore(self):
+
+    nupicCoreReleaseDir = self.getCommandLineOption("nupic-core-dir")
+    nupicCoreSourceDir = None
+    fetchNupicCore = True
+
+    if nupicCoreReleaseDir:
+      # User specified that they have their own nupic.core
+      fetchNupicCore = False
+    else:
+      nupicCoreReleaseDir, nupicCoreSourceDir = \
+        self.getDefaultNupicCoreDirectories()
+
+    nupicCoreRemote, nupicCoreCommitish = self.extractNupicCoreTarget()
 
     if fetchNupicCore:
       # User has not specified 'nupic.core' location, so we'll download the
