@@ -25,17 +25,10 @@ echo Running before_install-linux.sh...
 echo
 
 echo ">>> Doing prep work..."
-sudo add-apt-repository -y ppa:fkrull/deadsnakes
 sudo apt-get update
 
 echo ">>> Installing virtualenv..."
-sudo apt-get install python$PY_VER python$PY_VER-dev python-virtualenv cmake-data
-sudo ls -laFh /usr/lib/libpython$PY_VER.so
-
-echo ">>> Installing nupic-linux64..."
-git clone https://github.com/numenta/nupic-linux64.git
-(cd nupic-linux64 && git reset --hard 99863c7da8b923c57bb4e59530ab087c91fd3992)
-source nupic-linux64/bin/activate
+sudo apt-get install python python-dev python-virtualenv cmake-data
 
 # Workaround for multiprocessing.Queue SemLock error from run_opf_bechmarks_test.
 # See: https://github.com/travis-ci/travis-cookbooks/issues/155
