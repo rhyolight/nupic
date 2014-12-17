@@ -21,6 +21,8 @@ cmakeOptions = ""
 makeOptions = "install"
 setupOptions = ""
 mustBuildExtensions = False
+requirementsFile = "external/common/requirements.txt"
+
 for arg in sys.argv[:]:
   if ("cmake_options" in arg) or ("make_options" in arg):
     (option, _, rhs) = arg.partition("=")
@@ -65,6 +67,20 @@ def findPackages(repositoryDir):
   return packages
 
 
+def findRequirements(repositoryDir):
+  """
+  Read the requirements.txt file and parse into requirements for setup's
+  install_requirements option.
+  """
+  requirements = os.path.join(repositoryDir, requirementsFile)
+  requirementsList = []
+  with open(requirements, "r") as requirementsTxt:
+    for line in requirementsTxt.readlines():
+      if not line.startswith("#"):
+        requirementsList.append(line)
+  return requirementsList
+
+
 def buildExtensionsNupic():
   """
   CMake-specific build operations
@@ -102,6 +118,7 @@ def setupNupic():
     name = "nupic",
     version = version,
     packages = findPackages(repositoryDir),
+    install_requires = findRequirements(repositoryDir),
     # A lot of this stuff may not be packaged properly, most of it was added in
     # an effort to get a binary package prepared for nupic.regression testing
     # on Travis-CI, but it wasn't done the right way. I'll be refactoring a lot
