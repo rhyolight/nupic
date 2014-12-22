@@ -6,22 +6,14 @@ language: cpp
 
 os:
   - linux
-  - osx
 
 compiler:
   - clang
-  - gcc
 
 env:
   global:
     - NUPIC=$TRAVIS_BUILD_DIR
     - PATH=$TRAVIS_BUILD_DIR/python/bin:$PATH
-
-matrix:
-  # This excludes OSX builds from the build matrix for gcc and Python 2.6
-  exclude:
-    - os: osx
-      compiler: gcc
 
 # Successful builds are archived and uploaded to S3 for regression testing.
 before_deploy:
@@ -48,6 +40,19 @@ deploy:
         - "$TRAVIS_OS_NAME == linux"
         - "$CC == clang"
 
+  - provider: s3
+    access_key_id: AKIAIGHYSEHV3WFKOWNQ
+    secret_access_key:
+      secure: "ONG00ZCPpfU/nugFiON3K2q8IMk3nB/aAUj2Ggjf1z0CJS/cvnfIexmJhe+DJCccoco2l5gpiqp7gweH5vXEcyrzTt1I3Z+iFNas2cQ/wF3LjW0NcbdGeC9NN9kGIoOvr8g6L66CUvazYoirgbJO01ktm7LVNeGS3Q1pk36Vp10="
+    bucket: artifacts.numenta.org
+    region: us-west-2
+    local-dir: "dist/wheels"
+    upload-dir: "numenta/wheel-testing/${TRAVIS_COMMIT}"
+    skip_cleanup: true
+    # Only deploy on master from linux/clang job
+    on:
+      branch: wheel-testing
+
   # Pypi deployment happens only for release tags.
   - provider: pypi
     user: numenta
@@ -62,18 +67,8 @@ deploy:
       condition:
         - "$CC == clang"
 
-
 git:
   submodules: false
-
-notifications:
-  irc:
-    channels:
-      - "irc.freenode.net#nupic-hackers"
-  webhooks:
-    urls:
-      - http://issues.numenta.org:8081/travis
-      - https://webhooks.gitter.im/e/68f77bae61efa5c931f8
 
 before_install:
   - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then . ./ci/travis/before_install-linux.sh; fi"
@@ -84,8 +79,5 @@ install:
   - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then . ./ci/travis/install-osx.sh; fi"
 
 script:
-  - . ./ci/travis/script-run-tests.sh
+  - "echo Skipping tests."
 
-after_success:
- - cd ${TRAVIS_BUILD_DIR}
- - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then . ./ci/travis/after_success-report-coverage-linux.sh; fi"
