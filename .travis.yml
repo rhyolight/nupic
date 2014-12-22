@@ -43,7 +43,8 @@ deploy:
   - provider: s3
     access_key_id: AKIAIGHYSEHV3WFKOWNQ
     secret_access_key:
-      secure: "ONG00ZCPpfU/nugFiON3K2q8IMk3nB/aAUj2Ggjf1z0CJS/cvnfIexmJhe+DJCccoco2l5gpiqp7gweH5vXEcyrzTt1I3Z+iFNas2cQ/wF3LjW0NcbdGeC9NN9kGIoOvr8g6L66CUvazYoirgbJO01ktm7LVNeGS3Q1pk36Vp10="
+      # This key only works for "rhyolight/nupic"
+      secure: "PUK468rVumJGWt0P4vZb+oTLiievQL2hx7k53eaC+EYTeRAdioRrclyjD6GfueGtqpztcjXgJi3GXRCfPPy/GoJM2f+dloytLWlp/E8uB2VMX0CLw5585OivKsDILso1QyOZ4PT9XfwCxnsaCyvK9cmRJ2sDuyY9eTxsSF0KP7o="
     bucket: artifacts.numenta.org
     region: us-west-2
     local-dir: "dist/wheels"
