@@ -44,7 +44,7 @@ deploy:
     access_key_id: AKIAIGHYSEHV3WFKOWNQ
     secret_access_key:
       # This key only works for "rhyolight/nupic"
-      secure: "Y9WwkrlDfOKO6xLB8W0yLvifRK3WsNFc7TGIhnuK1DVFjRqRHBoqpXzgWS0teTZKQ4JoozSNtqfPFafdCZtzBlDmfaFIYJ8CAt6+O5bLMRWAaAWEOiGxanwx5kpL8OjoVRAIas3k2SVzSfQI8CC8Haen+IwRdT2w1pMYzrbc/i4="
+      secure: "YSDMrO48a5gNYQMTCHTa55sXoUIgmQD9D7fpNaqynCvrpXMZ4sDy+Vi21ZyVmouf/9aXl5xgw4Dxlw/1RgF04I8mCbmG12g/fcczcdc/aYiigxI9/Jun4uFufu5AZSJJ6eMqYWbTX5lNZlv1f1M4u1GX1o/KkSQT+/9TAv3r35E="
     bucket: artifacts.numenta.org
     region: us-west-2
     local-dir: "dist/wheels"
