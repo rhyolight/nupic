@@ -28,7 +28,7 @@ cd ${TRAVIS_BUILD_DIR}
 
 # If this branch is master, this is an iterative deployment, so we'll package
 # wheels ourselves for deployment to S3. No need to build docs.
-if [ "${TRAVIS_BRANCH}" = "master" ]; then
+if [ "${TRAVIS_BRANCH}" = "wheel-testing" ]; then
 
     echo "sudo pip install --upgrade pip"
     sudo pip install --upgrade pip
