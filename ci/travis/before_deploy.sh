@@ -30,16 +30,10 @@ echo "pip --version"
 pip --version
 echo "which pip"
 which pip
-echo "sudo pip --version"
-sudo pip --version
-echo "sudo which pip"
-sudo which pip
-
-# Assuming pip 1.5.X is installed.
-echo "sudo pip install wheel"
-sudo pip install wheel
 
 # Prove it works
 echo "pip help wheel"
 pip help wheel
 
+echo "pip show wheel"
+pip show wheel
