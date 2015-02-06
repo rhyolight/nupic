@@ -19,8 +19,12 @@ This collection of tutorials uses the "Hot Gym" premise to illustrate many ways 
 
 These are still being created.
 
-1. [One Gym Prediction Tutorial](prediction/one_gym/README.md)
+1. One Gym Prediction Tutorial
+    - [README](prediction/one_gym/README.md)
+    - [source code](prediction/one_gym)
+1. One Gym Anomaly Tutorial
+    - [README](anomaly/one_gym/README.md)
+    - [source code](anomaly/one_gym)
 1. [Many Gyms Prediction Tutorial](prediction/many_gyms/README.md)
-1. ~~One Gym Anomaly Tutorial~~
 1. ~~One Gym Metrics Tutorial~~
 1. ~~Advanced Swarming~~

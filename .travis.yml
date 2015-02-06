@@ -1,95 +1,87 @@
 branches:
   except:
     - gh-pages
-language: python
-python:
-  - "2.6"
-  - "2.7"
 
-git:
-  submodules: false
+language: cpp
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - clang
+  - gcc
 
 env:
   global:
     - NUPIC=$TRAVIS_BUILD_DIR
-    - NTA=$HOME/nta/eng
+    - PATH=$TRAVIS_BUILD_DIR/python/bin:$PATH
+    # AWS keys are for manual uploads of linux wheel to S3.
+    - AWS_ACCESS_KEY_ID=AKIAIGHYSEHV3WFKOWNQ
+    # AWS_SECRET_ACCESS_KEY encrypted below
+    - secure: "pYsMDbNp8k2i0d9p5mf/9TlDzxt2FiiR1QJV7QUn+S2/r372VYdZaplL+s9ItVGCGFpAyKk7HXcwm//DKw/ZKb6UlDJm3Fph9m+3aDDIiVFNB7g1uro+Yg8nIGuV8qZEtIaHRtR1zOt1EufoR9dg1Mq8ryRggN9rrB0FvCxUZAQ="
+    # PyPi credentials for manual uploads to Pypi on release.
+    - PYPI_USERNAME=numenta
+    # PYPI_PASSWD encrypted below.
+    - secure: "elm3E3MwpbZqTCz+EHPQ7CEBwoBvRgqS3q5MHY+jUcpdrWeSjmy7TZoRN5+rAjDQYuR5g33pMXnyeRGw/DG7Xa5FG0g3PoMnO6fnIe7Hs7gPlDXbwilfYxfi462N7Y9aAGPFuvNkZsgd0dfwXKwNEiZ5hYfsbFFwHMeXMQA/SA8="
+    - NUPIC_DEPLOYMENT_BUILD=true
 
-    # For S3 upload from travis-artifacts
-    - ARTIFACTS_AWS_REGION=us-west-2
-    - ARTIFACTS_S3_BUCKET=artifacts.numenta.org
+matrix:
+  # This excludes OSX GCC builds.
+  exclude:
+    - os: osx
+      compiler: gcc
 
-    # ARTIFACTS_AWS_ACCESS_KEY_ID
-    - secure: |-
-        LryXoMT+lhDYreY0xYVBZg0HbpZHik6fUh8ZqCiOoUYrCAkoMck1NWkvWMst
-        di3ZnAyQKxnOzqNpWDiBufJnA4OXzm4SnkDj5NT2ZYZ56jRNFXveRD9bmXcz
-        PFtP88dQvesy1el66EBBGTfuPls4pI7+Juu9iaK5jo9pup22rX0=
-
-    # ARTIFACTS_AWS_SECRET_ACCESS_KEY
-    - secure: |-
-        ZDEgrBeE7f9yTjD3Va4uvkEakNcNKTgNTJ8VWT9QUZdmEvlgvGWRvCbUZHQc
-        P+tJ/UVBATmEx5RHf0NqKFyfkC/VeA8C3D4ekCnbB11WF/4i8CCGCrhui9Mx
-        cfgr20Rz8KuuC/TZklPjVCy+0dXS3o2CL7u2b7XDGYzBYPxayjU=
-  matrix:
-    - CC=clang
-    - CC=gcc
+git:
+  submodules: false
 
 notifications:
   irc:
     channels:
       - "irc.freenode.net#nupic-hackers"
-  webhooks: http://issues.numenta.org:8081/travis
+  webhooks:
+    urls:
+      - http://issues.numenta.org:8081/travis
+      - https://webhooks.gitter.im/e/68f77bae61efa5c931f8
+
+# Successful builds are archived and uploaded to S3 for regression testing.
+before_deploy:
+  - . ./ci/travis/before_deploy.sh
+
+deploy:
+  # S3 deployment of NuPIC and dependency wheels on every push to master. These
+  # packages are used in dependent projects like nupic.regression and
+  # nupic.research.
+  - provider: s3
+    access_key_id: AKIAIGHYSEHV3WFKOWNQ
+    secret_access_key:
+      secure: "ONG00ZCPpfU/nugFiON3K2q8IMk3nB/aAUj2Ggjf1z0CJS/cvnfIexmJhe+DJCccoco2l5gpiqp7gweH5vXEcyrzTt1I3Z+iFNas2cQ/wF3LjW0NcbdGeC9NN9kGIoOvr8g6L66CUvazYoirgbJO01ktm7LVNeGS3Q1pk36Vp10="
+    bucket: artifacts.numenta.org
+    region: us-west-2
+    local-dir: "dist/wheels"
+    upload-dir: "numenta/nupic/${TRAVIS_COMMIT}"
+    skip_cleanup: true
+    # Only deploy on master from linux/clang job
+    on:
+      branch: master
+      condition:
+        - "$TRAVIS_OS_NAME == linux"
+        - "$CC == gcc-4.8"
 
 before_install:
-  - git clone https://github.com/numenta/nupic-linux64.git
-  - (cd nupic-linux64 && git reset --hard 9e4df07ee03184d670a8801b76f206785e2a8b2e)
-  - source nupic-linux64/bin/activate
-  - if [ "$CC" = "gcc" ]; then export CXX=g++; fi
-  - if [ "$CC" = "clang" ]; then export CXX=clang++; fi
+  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then . ./ci/travis/before_install-linux.sh; fi"
+  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then . ./ci/travis/before_install-osx.sh; fi"
 
 install:
-  - if [ $PY_VERSION != "2.6" ]; then (cd nupic-linux64/ && mkdir -p lib/python${PY_VERSION}/site-packages && make > /dev/null) fi
-  # Workaround for multiprocessing.Queue SemLock error from run_opf_bechmarks_test.
-  # See: https://github.com/travis-ci/travis-cookbooks/issues/155
-  - "sudo rm -rf /dev/shm && sudo ln -s /run/shm /dev/shm"
-  - pip install -q -r $NUPIC/external/common/requirements.txt
-  - "mkdir -p $TRAVIS_BUILD_DIR/build/scripts"
-  - "cd $TRAVIS_BUILD_DIR/build/scripts"
-  - "cmake $NUPIC -DPROJECT_BUILD_RELEASE_DIR:STRING=$NTA"
-  - "make -j3"
-  - "cd"
-  
-  # Add more environment variables
-  - "export PYTHONPATH=$PYTHONPATH:$NTA/lib/python$PY_VERSION/site-packages"
+  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then . ./ci/travis/install-linux.sh; fi"
+  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then . ./ci/travis/install-osx.sh; fi"
 
 script:
-  - "cd $TRAVIS_BUILD_DIR/build/scripts"
-  # legacy binary tests
-  - "make tests_pyhtm"
-  # actual unit tests
-  - "make tests_run_all"
-  - "cd"
+  - . ./ci/travis/script-run-tests.sh
 
-  # run all example files
-    # examples/bindings
-  - "python $NUPIC/examples/bindings/sparse_matrix_how_to.py"
-##  - "python $NUPIC/examples/bindings/svm_how_to.py" # tkinter missing in Travis build machine
-##  - "python $NUPIC/examples/bindings/temporal_pooler_how_to.py" # tkinter too
-    # examples/opf (run atleast 1 from each category)
-  - "python $NUPIC/examples/opf/bin/OpfRunExperiment.py $NUPIC/examples/opf/experiments/anomaly/spatial/2field_few_skewed/"
-  - "python $NUPIC/examples/opf/bin/OpfRunExperiment.py $NUPIC/examples/opf/experiments/anomaly/temporal/saw_200/"
-  - "python $NUPIC/examples/opf/bin/OpfRunExperiment.py $NUPIC/examples/opf/experiments/classification/category_TP_1/"
-  - "python $NUPIC/examples/opf/bin/OpfRunExperiment.py $NUPIC/examples/opf/experiments/missing_record/simple_0/"
-  - "python $NUPIC/examples/opf/bin/OpfRunExperiment.py $NUPIC/examples/opf/experiments/multistep/hotgym/"
-  - "python $NUPIC/examples/opf/bin/OpfRunExperiment.py $NUPIC/examples/opf/experiments/opfrunexperiment_test/simpleOPF/hotgym_1hr_agg/"
-             # opf/experiments/params - skip now
-  - "python $NUPIC/examples/opf/bin/OpfRunExperiment.py $NUPIC/examples/opf/experiments/spatial_classification/category_1/"
-    # examples/prediction
-  - "python $NUPIC/examples/prediction/RunExperiment.py $NUPIC/examples/prediction/experiments/dutyCycle/problem/"
-    # examples/tp
-  - "python $NUPIC/examples/tp/hello_tp.py"
-  - "python $NUPIC/examples/tp/tp_test.py"
-
-after_script:
-  - travis_retry gem install travis-artifacts > /dev/null
-  - tar -zcf nupic-linux64-$TRAVIS_COMMIT.tar.gz -C $NTA/.. --transform=s/eng/nupic-linux64-$TRAVIS_COMMIT/ --exclude="*.pyc" eng
-  - travis-artifacts upload --path nupic-linux64-$TRAVIS_COMMIT.tar.gz --target-path $TRAVIS_REPO_SLUG
+after_success:
+  - cd ${TRAVIS_BUILD_DIR}
+  # Run release script if this is a tagged build.
+  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then . ./ci/travis/after_success-report-coverage-linux.sh; fi"
+  - "if [ -n \"${TRAVIS_TAG}\" -a \"${TRAVIS_OS_NAME}--${CC}\" = 'linux--gcc-4.8' ]; then . ./ci/travis/after_success-release-linux.sh; fi"
+  - "if [ -n \"${TRAVIS_TAG}\" -a \"${TRAVIS_OS_NAME}--${CC}\" = 'osx--clang' ]; then . ./ci/travis/after_success-release-osx.sh; fi"

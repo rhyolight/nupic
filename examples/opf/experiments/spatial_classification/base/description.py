@@ -160,6 +160,8 @@ config = {
             # 0: silent; >=1: some info; >=2: more info;
             'spVerbosity' : 0,
 
+            'spatialImp' : 'oldpy',
+
             'globalInhibition': 1,
 
             # Number of cell columns in the cortical region (same number for
@@ -209,7 +211,7 @@ config = {
         'tpParams': {
             # TP diagnostic output verbosity control;
             # 0: silent; [1..6]: increasing levels of verbosity
-            # (see verbosity in nta/trunk/py/nupic/research/TP.py and TP10X*.py)
+            # (see verbosity in nupic/trunk/py/nupic/research/TP.py and TP10X*.py)
             'verbosity': 0,
 
             # Number of cell columns in the cortical region (same number for
@@ -348,7 +350,7 @@ applyValueGettersToContainer(config)
 
 control = {
   # The environment that the current model is being run in
-  "environment": 'grok',
+  "environment": 'nupic',
 
   # Input stream specification per py/nupic/frameworks/opf/jsonschema/stream_def.json.
   #
