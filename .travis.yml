@@ -6,10 +6,6 @@ language: cpp
 python:
   - "2.7"
 
-env:
-  global:
-    - PATH=$TRAVIS_BUILD_DIR/python/bin:$PATH
-
 before_install:
   - which python
 
