@@ -1,87 +1,17 @@
-branches:
-  except:
-    - gh-pages
-
-language: cpp
-
-os:
-  - linux
+os: 
   - osx
 
-compiler:
-  - clang
-  - gcc
-
-env:
-  global:
-    - NUPIC=$TRAVIS_BUILD_DIR
-    - PATH=$TRAVIS_BUILD_DIR/python/bin:$PATH
-    # AWS keys are for manual uploads of linux wheel to S3.
-    - AWS_ACCESS_KEY_ID=AKIAIGHYSEHV3WFKOWNQ
-    # AWS_SECRET_ACCESS_KEY encrypted below
-    - secure: "pYsMDbNp8k2i0d9p5mf/9TlDzxt2FiiR1QJV7QUn+S2/r372VYdZaplL+s9ItVGCGFpAyKk7HXcwm//DKw/ZKb6UlDJm3Fph9m+3aDDIiVFNB7g1uro+Yg8nIGuV8qZEtIaHRtR1zOt1EufoR9dg1Mq8ryRggN9rrB0FvCxUZAQ="
-    # PyPi credentials for manual uploads to Pypi on release.
-    - PYPI_USERNAME=numenta
-    # PYPI_PASSWD encrypted below.
-    - secure: "elm3E3MwpbZqTCz+EHPQ7CEBwoBvRgqS3q5MHY+jUcpdrWeSjmy7TZoRN5+rAjDQYuR5g33pMXnyeRGw/DG7Xa5FG0g3PoMnO6fnIe7Hs7gPlDXbwilfYxfi462N7Y9aAGPFuvNkZsgd0dfwXKwNEiZ5hYfsbFFwHMeXMQA/SA8="
-    - NUPIC_DEPLOYMENT_BUILD=true
-
-matrix:
-  # This excludes OSX GCC builds.
-  exclude:
-    - os: osx
-      compiler: gcc
-
-git:
-  submodules: false
-
-notifications:
-  irc:
-    channels:
-      - "irc.freenode.net#nupic-hackers"
-  webhooks:
-    urls:
-      - http://issues.numenta.org:8081/travis
-      - https://webhooks.gitter.im/e/68f77bae61efa5c931f8
-
-# Successful builds are archived and uploaded to S3 for regression testing.
-before_deploy:
-  - . ./ci/travis/before_deploy.sh
-
-deploy:
-  # S3 deployment of NuPIC and dependency wheels on every push to master. These
-  # packages are used in dependent projects like nupic.regression and
-  # nupic.research.
-  - provider: s3
-    access_key_id: AKIAIGHYSEHV3WFKOWNQ
-    secret_access_key:
-      secure: "ONG00ZCPpfU/nugFiON3K2q8IMk3nB/aAUj2Ggjf1z0CJS/cvnfIexmJhe+DJCccoco2l5gpiqp7gweH5vXEcyrzTt1I3Z+iFNas2cQ/wF3LjW0NcbdGeC9NN9kGIoOvr8g6L66CUvazYoirgbJO01ktm7LVNeGS3Q1pk36Vp10="
-    bucket: artifacts.numenta.org
-    region: us-west-2
-    local-dir: "dist/wheels"
-    upload-dir: "numenta/nupic/${TRAVIS_COMMIT}"
-    skip_cleanup: true
-    # Only deploy on master from linux/clang job
-    on:
-      branch: master
-      condition:
-        - "$TRAVIS_OS_NAME == linux"
-        - "$CC == gcc-4.8"
+language: python
+python:
+  - "2.7"
 
 before_install:
-  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then . ./ci/travis/before_install-linux.sh; fi"
-  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then . ./ci/travis/before_install-osx.sh; fi"
+  - which python
 
 install:
-  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then . ./ci/travis/install-linux.sh; fi"
-  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then . ./ci/travis/install-osx.sh; fi"
+  - brew install wget
+  - wget https://www.python.org/ftp/python/2.7.9/python-2.7.9-macosx10.6.pkg
+  - sudo installer -pkg python-2.7.9-macosx10.6.pkg -target /
 
 script:
-  - . ./ci/travis/script-run-tests.sh
-
-after_success:
-  - cd ${TRAVIS_BUILD_DIR}
-  # Run release script if this is a tagged build.
-  - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then . ./ci/travis/after_success-report-coverage-linux.sh; fi"
-  - "if [ -n \"${TRAVIS_TAG}\" -a \"${TRAVIS_OS_NAME}--${CC}\" = 'linux--gcc-4.8' ]; then . ./ci/travis/after_success-release-linux.sh; fi"
-  - "if [ -n \"${TRAVIS_TAG}\" -a \"${TRAVIS_OS_NAME}--${CC}\" = 'osx--clang' ]; then . ./ci/travis/after_success-release-osx.sh; fi"
+  - which python
