@@ -36,6 +36,7 @@ if [ "${TRAVIS_BRANCH}" = "master" ]; then
 
     # Build all NuPIC and all required python packages into dist/wheels as .whl
     # files.
+    mkdir -p dist/wheels
     echo "pip wheel --wheel-dir=dist/wheels ."
     pip wheel --wheel-dir=dist/wheels .
 
