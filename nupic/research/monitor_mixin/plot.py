@@ -22,9 +22,15 @@
 """
 Plot class used in monitor mixin framework.
 """
-import matplotlib.pyplot as plt
-import matplotlib.cm as colorModel
+import traceback
 
+try:
+  # We import in here to avoid creating a matplotlib dependency in nupic.
+  import matplotlib.pyplot as plt
+  import matplotlib.cm as cm
+except ImportError:
+  print "Cannot import matplotlib. Plot class will not work."
+  print traceback.format_exc() + "\n"
 
 
 class Plot(object):
@@ -32,13 +38,14 @@ class Plot(object):
 
   def __init__(self, monitor, title):
     """
+
     @param monitor (MonitorMixinBase) Monitor Mixin instance that generated
                                       this plot
-    @param title  (string)          Plot title
+
+    @param title  (string)            Plot title
     """
     self._monitor = monitor
     self._title = title
-
     self._fig = self._initFigure()
     plt.ion()
     plt.show()
@@ -87,8 +94,8 @@ class Plot(object):
     plt.draw()
 
 
-  def add2DArray(self, data, position=111, xlabel=None, ylabel=None,
-               cmap=colorModel.Greys, aspect="auto", interpolation="nearest"):
+  def add2DArray(self, data, position=111, xlabel=None, ylabel=None, cmap=None,
+                 aspect="auto", interpolation="nearest"):
     """ Adds an image to the plot's figure.
 
     @param data a 2D array. See matplotlib.Axes.imshow documentation.
@@ -101,6 +108,10 @@ class Plot(object):
     @param aspect how aspect ratio is handled during resize
     @param interpolation interpolation method
     """
+    if cmap is None:
+      # The default colormodel is an ugly blue-red model.
+      cmap = cm.Greys
+
     ax = self._addBase(position, xlabel=xlabel, ylabel=ylabel)
     ax.imshow(data, cmap=cmap, aspect=aspect, interpolation=interpolation)
     plt.draw()

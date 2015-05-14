@@ -6,7 +6,7 @@ The Numenta Platform for Intelligent Computing (**NuPIC**) is a machine intellig
 
 For more information, see [numenta.org](http://numenta.org) or the [NuPIC wiki](https://github.com/numenta/nupic/wiki).
 
-## Installing NuPIC 0.1.2
+## Installing NuPIC 0.2.2
 
 NuPIC binaries are available for:
 
@@ -19,6 +19,7 @@ NuPIC binaries are available for:
 - [Python 2.7 & development headers](https://docs.python.org/devguide/setup.html#build-dependencies)
 - [pip](https://pypi.python.org/pypi/pip)
 - [wheel](http://pythonwheels.com)
+- [numpy](http://www.numpy.org/)
 
 ### Mac OS X
 
@@ -28,7 +29,7 @@ NuPIC binaries are available for:
 
 > The Linux wheel file is hosted on AWS S3 instead of on the standard PyPi servers because [Linux wheels are not allowed to be uploaded to pypi](https://bitbucket.org/pypa/pypi-metadata-formats/issue/15/enhance-the-platform-tag-definition-for) yet.
 
-    pip install https://s3-us-west-2.amazonaws.com/artifacts.numenta.org/numenta/nupic/releases/nupic-0.1.2-cp27-none-linux_x86_64.whl
+    pip install https://s3-us-west-2.amazonaws.com/artifacts.numenta.org/numenta/nupic/releases/nupic-0.2.2-cp27-none-linux_x86_64.whl
 
 
 ### _Having problems?_
@@ -36,7 +37,9 @@ NuPIC binaries are available for:
 - You may need to use the `--user` flag for the commands above to install in a non-system location (depends on your environment). Alternatively, you can execute the `pip` commands with `sudo` (not recommended).
 - You may need to add the `--use-wheel` option if you have an older pip version (wheels are now the default binary package format for pip).
 
-For any other installation issues, please see our [FAQ](https://github.com/numenta/nupic/wiki/FAQ) or email the [nupic-discuss](http://lists.numenta.org/mailman/listinfo/nupic_lists.numenta.org) mailing list.
+For any other installation issues, please see our [FAQ](https://github.com/numenta/nupic/wiki/FAQ), email the [nupic-discuss](http://lists.numenta.org/mailman/listinfo/nupic_lists.numenta.org) mailing list, or chat with us on Gitter.
+
+[![Gitter](https://img.shields.io/badge/gitter-join_chat-blue.svg?style=flat)](https://gitter.im/numenta/public?utm_source=badge)
 
 ### Building NuPIC From Source Code
 
