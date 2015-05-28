@@ -88,6 +88,7 @@ def runHotgym():
                                    "errorMetric='altMAPE':steps=1:window=1000:"
                                    "field=consumption"])
       if isLast:
+        model.save('/tmp/my-model')
         break
 
 
