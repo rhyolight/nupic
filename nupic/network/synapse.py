@@ -35,26 +35,4 @@ class Synapse(object):
     self.presynapticCell = presynapticCell
     self.presynapticCellIndex = presynapticCellIndex
 
-    Synapse._validatePermanence(permanence)
-    self._permanence = permanence
-
-
-  @property
-  def permanence(self):
-    return self._permanence
-
-
-  @permanence.setter
-  def permanence(self, value):
-    Synapse._validatePermanence(value)
-    self._permanence = value
-
-
-  @staticmethod
-  def _validatePermanence(permanence):
-    """
-    Raises an error if permanence is invalid.
-    @param permanence (float) Permanence
-    """
-    if permanence < 0 or permanence > 1:
-      raise ValueError("Invalid permanence")
+    self.permanence = permanence

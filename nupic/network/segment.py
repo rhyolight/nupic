@@ -25,8 +25,9 @@ from nupic.network.synapse import Synapse
 
 class Segment(object):
 
-  def __init__(self, cell):
+  def __init__(self, cell=None, column=None):
     self.cell = cell
+    self.column = column
     self.synapses = set()
 
 

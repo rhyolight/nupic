@@ -87,7 +87,7 @@ if __name__ == '__main__':
   # need to retrieve data from the SP
   numRecords = 1000
   
-  columnDimensions = 64
+  columnDimensions = 256
   numCellsPerColumn = 4
 
   startTime = time.time()

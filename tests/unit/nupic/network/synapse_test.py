@@ -1,4 +1,5 @@
-﻿# ----------------------------------------------------------------------
+﻿#!/usr/bin/env python
+# ----------------------------------------------------------------------
 # Numenta Platform for Intelligent Computing (NuPIC)
 # Copyright (C) 2014, Numenta, Inc.  Unless you have an agreement
 # with Numenta, Inc., for a separate license for this software code, the
@@ -19,11 +20,29 @@
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
 
+import unittest
+
+from nupic.network.cell import Cell
 from nupic.network.segment import Segment
+from nupic.network.synapse import Synapse
 
 
 
-class Column(object):
+class SynapseTest(unittest.TestCase):
+  
 
-  def __init__(self):
-    self.segment = Segment(self, column=self)
+  def testSynapseSetPermanence(self):    
+    cell1 = Cell()
+    segment1 = cell1.createSegment()
+    synapse = segment1.createSynapse(presynapticCell=Cell(), permanence=0.1284)
+
+    # Invalid permanence
+    args = [1.4374]
+    self.assertRaises(ValueError, setattr, synapse, "permanence", *args)
+    args = [-0.4374]
+    self.assertRaises(ValueError, setattr, synapse, "permanence", *args)
+
+
+
+if __name__ == '__main__':
+  unittest.main()
