@@ -1,6 +1,12 @@
 Encoders
 =================================
 
+Encoder
+^^^^^^^
+
+.. autoclass:: nupic.encoders.base.Encoder
+   :members:
+
 Scalar Encoder
 ^^^^^^^^^^^^^^
 

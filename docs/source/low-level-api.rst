@@ -9,3 +9,4 @@ Low Level API
    spatial-pooler
    temporal-memory
    classifiers
+   data
