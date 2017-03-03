@@ -86,14 +86,20 @@ html_theme = 'alabaster'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
-# html_theme_options = {}
+
+html_theme_options = {
+    'github_user': 'numenta',
+    'github_repo': 'nupic',
+    'github_banner': True,
+    'font_family': 'Verdana',
+    'head_font_family': 'Verdana',
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
+html_logo = 'numenta-logo.png'
 
 # -- Options for HTMLHelp output ------------------------------------------
 

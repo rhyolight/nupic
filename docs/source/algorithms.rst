@@ -8,4 +8,3 @@ Algorithms
    spatial-pooler
    temporal-memory
    classifiers
-   data
