@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Algorithms &#8212; NuPIC 0.5.8.dev0
+    <title>Swarming &#8212; NuPIC 0.5.8.dev0
  documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Spatial Pooler" href="spatial-pooler.html" />
-    <link rel="prev" title="Encoders" href="encoders.html" />
+    <link rel="next" title="Hot Gym Code Example" href="guide-sample-code.html" />
+    <link rel="prev" title="The Network API" href="guide-network-api.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -44,20 +44,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="algorithms">
-<h1>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="spatial-pooler.html">Spatial Pooler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="temporal-memory.html">Temporal Memory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classifiers.html">Classifiers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="classifiers.html#sdr-classifier">SDR Classifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classifiers.html#cla-classifier">CLA Classifier</a></li>
+  <div class="section" id="swarming">
+<span id="swarming"></span><h1>Swarming<a class="headerlink" href="#swarming" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>Swarming is a process that automatically determines the best model for a given dataset. By &#8220;best&#8221;, we mean the model that most accurately produces the desired output. Swarming figures out which optional components should go into a model (encoders, spatial pooler, temporal pooler, classifier, etc.), as well as the best parameter values to use for each component.</div></blockquote>
+<p>We have plans to replace the current swarming library with a more universal parameter search library. This codebase is currently unmaintained. We currently have no API documentation for it.</p>
+<p><a class="reference external" href="http://www.youtube.com/watch?v=xYPKjKQ4YZ0"><img alt="Swarming in NuPIC" src="http://img.youtube.com/vi/xYPKjKQ4YZ0/hqdefault.jpg" /></a></p>
+<ul class="simple">
+<li><a class="reference external" href="Running-Swarms">Running Swarms</a></li>
+<li><a class="reference external" href="Swarming-Algorithm">Swarming Algorithm</a></li>
 </ul>
-</li>
-</ul>
-</div>
 </div>
 
 
@@ -72,15 +68,17 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="encoders.html" title="previous chapter">Encoders</a></li>
-      <li>Next: <a href="spatial-pooler.html" title="next chapter">Spatial Pooler</a></li>
+  <li><a href="guide.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="guide-network-api.html" title="previous chapter">The Network API</a></li>
+      <li>Next: <a href="guide-sample-code.html" title="next chapter">Hot Gym Code Example</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/algorithms.rst.txt"
+      <li><a href="_sources/guide-swarming.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -106,7 +104,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/algorithms.rst.txt"
+      <a href="_sources/guide-swarming.md.txt"
           rel="nofollow">Page source</a>
     </div>
 

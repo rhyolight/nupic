@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Algorithms &#8212; NuPIC 0.5.8.dev0
+    <title>Hot Gym Code Example &#8212; NuPIC 0.5.8.dev0
  documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Spatial Pooler" href="spatial-pooler.html" />
-    <link rel="prev" title="Encoders" href="encoders.html" />
+    <link rel="next" title="Encoders" href="encoders.html" />
+    <link rel="prev" title="Swarming" href="guide-swarming.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -44,20 +44,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="algorithms">
-<h1>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="spatial-pooler.html">Spatial Pooler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="temporal-memory.html">Temporal Memory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classifiers.html">Classifiers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="classifiers.html#sdr-classifier">SDR Classifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classifiers.html#cla-classifier">CLA Classifier</a></li>
+  <div class="section" id="hot-gym-code-example">
+<span id="hot-gym-code-example"></span><h1>Hot Gym Code Example<a class="headerlink" href="#hot-gym-code-example" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://github.com/numenta/nupic/tree/master/examples/opf/clients/hotgym">&#8220;hot gym&#8221;</a> sample application has been around for a long time, and was one of the first real-world applications of NuPIC that proved the value of cortically-inspired learning algorithms. The data used is real energy consumption data from a gym in Australia, which simply contains a timestamp and float value for energy consumption.</p>
+<p>The &#8220;hot gym&#8221; sample application has been around for a long time, and was one of the first real-world applications of NuPIC that actually worked. The data used is real energy consumption data from a gym in Australia. It is aggregated hourly already, so the input CSV file simply contains a timestamp and float value for energy consumption during that hour.</p>
+<p>This collection of tutorials uses the &#8220;Hot Gym&#8221; premise to illustrate many ways users can set up and run a NuPIC application against real-world data.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/numenta/nupic/tree/master/examples/opf/clients/hotgym/anomaly">Basic Anomaly Client through OPF</a></li>
+<li><a class="reference external" href="https://github.com/numenta/nupic/tree/master/examples/opf/clients/hotgym/prediction/one_gym">Prediction with OPF</a></li>
+<li><a class="reference external" href="https://github.com/numenta/nupic/tree/master/examples/opf/clients/hotgym/anomaly/one_gym">Anomaly Detection with OPF</a></li>
 </ul>
-</li>
-</ul>
-</div>
 </div>
 
 
@@ -72,15 +68,17 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="encoders.html" title="previous chapter">Encoders</a></li>
-      <li>Next: <a href="spatial-pooler.html" title="next chapter">Spatial Pooler</a></li>
+  <li><a href="guide.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="guide-swarming.html" title="previous chapter">Swarming</a></li>
+      <li>Next: <a href="encoders.html" title="next chapter">Encoders</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/algorithms.rst.txt"
+      <li><a href="_sources/guide-sample-code.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -106,7 +104,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/algorithms.rst.txt"
+      <a href="_sources/guide-sample-code.md.txt"
           rel="nofollow">Page source</a>
     </div>
 

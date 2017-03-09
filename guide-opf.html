@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Algorithms &#8212; NuPIC 0.5.8.dev0
+    <title>The Online Prediction Framework (OPF) &#8212; NuPIC 0.5.8.dev0
  documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Spatial Pooler" href="spatial-pooler.html" />
-    <link rel="prev" title="Encoders" href="encoders.html" />
+    <link rel="next" title="The Network API" href="guide-network-api.html" />
+    <link rel="prev" title="Algorithm API" href="guide-algorithms.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -44,20 +44,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="algorithms">
-<h1>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="spatial-pooler.html">Spatial Pooler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="temporal-memory.html">Temporal Memory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classifiers.html">Classifiers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="classifiers.html#sdr-classifier">SDR Classifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="classifiers.html#cla-classifier">CLA Classifier</a></li>
+  <div class="section" id="the-online-prediction-framework-opf">
+<span id="the-online-prediction-framework-opf"></span><h1>The Online Prediction Framework (OPF)<a class="headerlink" href="#the-online-prediction-framework-opf" title="Permalink to this headline">¶</a></h1>
+<p>The OPF is a Python-only convenience library that uses the <a class="reference external" href="network.html">Network API</a>. The primary classes it exposes to users are the <a class="reference external" href="opf-models.html#clamodel"><code class="docutils literal"><span class="pre">CLAModel</span></code></a> and the <a class="reference external" href="opf-models.html#modelfactory"><code class="docutils literal"><span class="pre">ModelFactory</span></code></a>.</p>
+<p>Online Prediction Framework (OPF) is a framework for working with and deriving predictions from online learning algorithms, including HTM. OPF is designed to work in conjunction with a larger architecture, as well as in a standalone mode (i.e. directly from the command line). It is also designed such that new model algorithms and functionalities can be added with minimal code changes.</p>
+<p>More complete documentation on the OPF can be found on the <a class="reference external" href="https://github.com/numenta/nupic/wiki/Online-Prediction-Framework">Online Prediction Framework</a> wiki page. Here are some examples of applications using the OPF interface:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/numenta/nupic/tree/master/examples/opf/clients/cpu"><code class="docutils literal"><span class="pre">examples/opf/clients/cpu</span></code></a></li>
+<li><a class="reference external" href="https://github.com/numenta/nupic/tree/master/examples/opf/clients/hotgym/prediction/one_gym"><code class="docutils literal"><span class="pre">examples/opf/clients/hotgym/prediction/one_gym</span></code></a></li>
+<li><a class="reference external" href="https://github.com/numenta/nupic/tree/master/examples/opf/clients/hotgym/anomaly"><code class="docutils literal"><span class="pre">examples/opf/clients/hotgym/anomaly</span></code></a></li>
+<li><a class="reference external" href="https://github.com/numenta/nupic/tree/master/examples/opf/clients/hotgym/anomaly/one_gym"><code class="docutils literal"><span class="pre">examples/opf/clients/hotgym/anomaly/one_gym</span></code></a></li>
 </ul>
-</li>
-</ul>
-</div>
 </div>
 
 
@@ -72,15 +69,17 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="encoders.html" title="previous chapter">Encoders</a></li>
-      <li>Next: <a href="spatial-pooler.html" title="next chapter">Spatial Pooler</a></li>
+  <li><a href="guide.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="guide-algorithms.html" title="previous chapter">Algorithm API</a></li>
+      <li>Next: <a href="guide-network-api.html" title="next chapter">The Network API</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/algorithms.rst.txt"
+      <li><a href="_sources/guide-opf.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -106,7 +105,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/algorithms.rst.txt"
+      <a href="_sources/guide-opf.md.txt"
           rel="nofollow">Page source</a>
     </div>
 
