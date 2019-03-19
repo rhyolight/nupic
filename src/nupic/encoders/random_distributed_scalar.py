@@ -30,13 +30,6 @@ from nupic.data.field_meta import FieldMetaType
 from nupic.encoders.base import Encoder
 from nupic.bindings.math import Random as NupicRandom
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.random_distributed_scalar_capnp import (
-    RandomDistributedScalarEncoderProto)
 
 
 INITIAL_BUCKETS = 1000

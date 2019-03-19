@@ -33,12 +33,6 @@ from nupic.encoders import (ScalarEncoder,
                             GeospatialCoordinateEncoder,
                             RandomDistributedScalarEncoder)
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.multi_capnp import MultiEncoderProto
 
 # Map class to Cap'n Proto schema union attribute
 _CLASS_ATTR_MAP = {

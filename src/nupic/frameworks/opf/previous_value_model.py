@@ -28,13 +28,6 @@ from nupic.frameworks.opf import model
 from nupic.frameworks.opf import opf_utils
 from opf_utils import InferenceType
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.frameworks.opf.previous_value_model_capnp import (
-    PreviousValueModelProto)
 
 
 

@@ -29,12 +29,6 @@ import nupic.algorithms.fdrutilities as fdru
 from nupic.algorithms.spatial_pooler import SpatialPooler as PYSpatialPooler
 from nupic.support import getArgumentDescriptions
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.regions.SPRegion_capnp import SPRegionProto
 
 
 def getDefaultSPImp():

@@ -30,13 +30,6 @@ from nupic.algorithms.backtracking_tm import BacktrackingTM
 from nupic.algorithms.backtracking_tm_cpp import BacktrackingTMCPP
 from nupic.algorithms.connections import Connections
 from nupic.math import GetNTAReal
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.algorithms.temporal_memory_shim_capnp import (
-    TemporalMemoryShimProto)
 
 
 

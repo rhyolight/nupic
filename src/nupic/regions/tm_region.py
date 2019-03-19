@@ -22,17 +22,10 @@
 import numpy
 import os
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
 
 from nupic.bindings.regions.PyRegion import PyRegion
 
-from nupic.algorithms import (anomaly, backtracking_tm, backtracking_tm_cpp,
-                              backtracking_tm_shim)
-if capnp:
-  from nupic.regions.tm_region_capnp import TMRegionProto
+from nupic.algorithms import anomaly
 
 from nupic.support import getArgumentDescriptions
 
@@ -47,9 +40,9 @@ def _getTPClass(temporalImp):
   """
 
   if temporalImp == 'py':
-    return backtracking_tm.BacktrackingTM
+    return None
   elif temporalImp == 'cpp':
-    return backtracking_tm_cpp.BacktrackingTMCPP
+    return None
   elif temporalImp == 'tm_py':
     return backtracking_tm_shim.TMShim
   elif temporalImp == 'tm_cpp':

@@ -24,12 +24,6 @@ from nupic.data.field_meta import FieldMetaType
 from nupic.encoders.base import Encoder
 
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.pass_through_capnp import PassThroughEncoderProto
 
 
 class PassThroughEncoder(Encoder):

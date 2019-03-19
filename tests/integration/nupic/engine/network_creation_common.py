@@ -33,12 +33,6 @@ from nupic.regions.record_sensor import RecordSensor
 from nupic.regions.sp_region import SPRegion
 from nupic.regions.tm_region import TMRegion
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.proto import NetworkProto_capnp
 
 
 _VERBOSITY = 0  # how chatty the test should be
@@ -175,28 +169,6 @@ def createNetwork(dataSource, enableTP=False, temporalImp="py"):
   return network
 
 
-def saveAndLoadNetwork(network):
-  # Save network
-  proto1 = NetworkProto_capnp.NetworkProto.new_message()
-  network.write(proto1)
-
-  with tempfile.TemporaryFile() as f:
-    proto1.write(f)
-    f.seek(0)
-
-    # Load network
-    proto2 = NetworkProto_capnp.NetworkProto.read(f)
-    loadedNetwork = Network.read(proto2)
-
-    # Set loaded network's datasource
-    sensor = network.regions["sensor"].getSelf()
-    loadedSensor = loadedNetwork.regions["sensor"].getSelf()
-    loadedSensor.dataSource = sensor.dataSource
-
-    # Initialize loaded network
-    loadedNetwork.initialize()
-
-  return loadedNetwork
 
 
 def createAndRunNetwork(testRegionType, testOutputName,

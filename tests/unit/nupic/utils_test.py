@@ -27,14 +27,6 @@ import unittest
 
 from nupic.utils import MovingAverage
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.movingaverage_capnp import MovingAverageProto
-
-
 
 class UtilsTest(unittest.TestCase):
   """testing common.utils"""
@@ -125,32 +117,6 @@ class UtilsTest(unittest.TestCase):
     self.assertListEqual(ma.getSlidingWindow(), [])
 
 
-  @unittest.skipUnless(
-      capnp, "pycapnp is not installed, skipping serialization test.")
-  def testMovingAverageReadWrite(self):
-    ma = MovingAverage(windowSize=3)
-
-    ma.next(3)
-    ma.next(4.5)
-    ma.next(5)
-
-    proto1 = MovingAverageProto.new_message()
-    ma.write(proto1)
-
-    # Write the proto to a temp file and read it back into a new proto
-    with tempfile.TemporaryFile() as f:
-      proto1.write(f)
-      f.seek(0)
-      proto2 = MovingAverageProto.read(f)
-
-    resurrectedMa = MovingAverage.read(proto2)
-
-    newAverage = ma.next(6)
-    self.assertEqual(newAverage, resurrectedMa.next(6))
-    self.assertListEqual(ma.getSlidingWindow(),
-                         resurrectedMa.getSlidingWindow())
-    self.assertEqual(ma.total, resurrectedMa.total)
-    self.assertTrue(ma, resurrectedMa) #using the __eq__ method
 
 
   def testSerialization(self):

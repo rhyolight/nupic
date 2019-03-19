@@ -23,12 +23,6 @@ from bisect import bisect_left
 from collections import defaultdict
 
 from nupic.serializable import Serializable
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.proto.ConnectionsProto_capnp import ConnectionsProto
 
 EPSILON = 0.00001 # constant error threshold to check equality of permanences to
                   # other floats

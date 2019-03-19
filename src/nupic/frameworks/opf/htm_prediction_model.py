@@ -49,14 +49,6 @@ from nupic.frameworks.opf.opf_utils import (InferenceType,
                                             ClassifierInput,
                                             initLogger)
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.frameworks.opf.HTMPredictionModelProto_capnp \
-    import HTMPredictionModelProto
-
 
 DEFAULT_LIKELIHOOD_THRESHOLD = 0.0001
 DEFAULT_MAX_PREDICTIONS_PER_STEP = 8

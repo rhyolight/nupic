@@ -32,12 +32,6 @@ import numpy
 
 from nupic.serializable import Serializable
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.proto.SdrClassifier_capnp import SdrClassifierProto
 
 class SDRClassifier(Serializable):
   """

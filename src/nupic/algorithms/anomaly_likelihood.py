@@ -122,12 +122,6 @@ import numpy
 from nupic.serializable import Serializable
 from nupic.utils import MovingAverage
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.algorithms.anomaly_likelihood_capnp import AnomalyLikelihoodProto
 
 class AnomalyLikelihood(Serializable):
   """

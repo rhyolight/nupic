@@ -29,12 +29,6 @@ from nupic.bindings.regions.PyRegion import PyRegion
 from nupic.algorithms import knn_classifier
 from nupic.bindings.math import Random
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.regions.knn_classifier_region_capnp import KNNClassifierRegionProto
 
 
 

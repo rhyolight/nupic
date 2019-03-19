@@ -102,30 +102,5 @@ class TMRegionTest(unittest.TestCase):
                                    output2["lrnActiveStateT"]))
 
 
-  @unittest.skipUnless(
-    capnp, "pycapnp is not installed, skipping serialization test.")
-  def testWriteReadPy(self):
-    self.checkTMRegionImpl("py")
-
-
-  @unittest.skipUnless(
-    capnp, "pycapnp is not installed, skipping serialization test.")
-  def testWriteReadCpp(self):
-    self.checkTMRegionImpl("cpp")
-
-
-  @unittest.skipUnless(
-    capnp, "pycapnp is not installed, skipping serialization test.")
-  def testWriteReadTMPy(self):
-    self.checkTMRegionImpl("tm_py")
-
-
-  @unittest.skipUnless(
-    capnp, "pycapnp is not installed, skipping serialization test.")
-  def testWriteReadTMCpp(self):
-    self.checkTMRegionImpl("tm_cpp")
-
-
-
 if __name__ == "__main__":
   unittest.main()

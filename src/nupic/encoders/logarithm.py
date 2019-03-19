@@ -26,12 +26,6 @@ from nupic.data import SENTINEL_VALUE_FOR_MISSING_DATA
 from nupic.data.field_meta import FieldMetaType
 from nupic.encoders.base import Encoder, EncoderResult
 from nupic.encoders import ScalarEncoder
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.logarithm_capnp import LogEncoderProto
 
 EPSILON_ROUND = 7 # Used to round floats
 

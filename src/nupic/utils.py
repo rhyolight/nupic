@@ -27,12 +27,6 @@ in our codebase.
 import numbers
 
 from nupic.serializable import Serializable
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.movingaverage_capnp import MovingAverageProto
 
 
 class MovingAverage(Serializable):

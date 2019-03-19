@@ -26,12 +26,6 @@ from nupic.data import SENTINEL_VALUE_FOR_MISSING_DATA
 from nupic.encoders.base import Encoder, EncoderResult
 from nupic.encoders.scalar import ScalarEncoder
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.category_capnp import CategoryEncoderProto
 
 
 UNKNOWN = "<UNKNOWN>"

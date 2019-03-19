@@ -27,12 +27,6 @@ from nupic.bindings.math import Random
 from nupic.encoders.base import Encoder
 
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.coordinate_capnp import CoordinateEncoderProto
 
 
 class CoordinateEncoder(Encoder):

@@ -27,12 +27,6 @@ from nupic.algorithms import anomaly
 from nupic.bindings.regions.PyRegion import PyRegion
 
 from nupic.serializable import Serializable
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.regions.AnomalyRegion_capnp import AnomalyRegionProto
 
 
 class AnomalyRegion(PyRegion, Serializable):

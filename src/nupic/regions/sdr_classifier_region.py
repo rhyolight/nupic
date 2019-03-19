@@ -30,12 +30,6 @@ from nupic.bindings.regions.PyRegion import PyRegion
 from nupic.algorithms.sdr_classifier_factory import SDRClassifierFactory
 from nupic.support.configuration import Configuration
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.regions.SDRClassifierRegion_capnp import SDRClassifierRegionProto
 
 
 

@@ -24,13 +24,6 @@ from nupic.bindings.regions.PyRegion import PyRegion
 from nupic.data.field_meta import FieldMetaType
 from nupic.encoders.multi import MultiEncoder
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.record_sensor_capnp import RecordSensorProto
-
 
 
 class RecordSensor(PyRegion):

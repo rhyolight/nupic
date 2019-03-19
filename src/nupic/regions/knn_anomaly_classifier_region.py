@@ -34,13 +34,6 @@ from nupic.bindings.math import Random
 from nupic.frameworks.opf.exceptions import (HTMPredictionModelInvalidRangeError,
                                              HTMPredictionModelInvalidArgument)
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.regions.knn_anomaly_classifier_region_capnp import \
-    KNNAnomalyClassifierRegionProto
 
 
 

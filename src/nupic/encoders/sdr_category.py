@@ -27,12 +27,6 @@ from nupic.data import SENTINEL_VALUE_FOR_MISSING_DATA
 from nupic.encoders.base import Encoder, EncoderResult
 from nupic.bindings.math import SM32, GetNTAReal, Random as NupicRandom
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.sdr_category_capnp import SDRCategoryEncoderProto
 
 
 class SDRCategoryEncoder(Encoder):

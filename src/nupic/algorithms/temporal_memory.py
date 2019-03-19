@@ -32,12 +32,6 @@ from nupic.algorithms.connections import Connections, binSearch
 from nupic.serializable import Serializable
 from nupic.support.group_by import groupby2
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.proto.TemporalMemoryProto_capnp import TemporalMemoryProto
 
 EPSILON = 0.00001 # constant error threshold to check equality of permanences to
                   # other floats

@@ -27,14 +27,7 @@ from nupic.bindings.math import (NearestNeighbor, min_score_per_category)
 
 from nupic.serializable import Serializable
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
 import numpy
-
-if capnp:
-  from nupic.algorithms.knn_classifier_capnp import KNNClassifierProto
 
 
 g_debugPrefix = "KNN"

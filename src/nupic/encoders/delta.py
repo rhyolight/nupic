@@ -25,12 +25,6 @@ from nupic.data import SENTINEL_VALUE_FOR_MISSING_DATA
 from nupic.encoders.adaptive_scalar import AdaptiveScalarEncoder
 from nupic.encoders.base import EncoderResult
 
-try:
-  import capnp
-except ImportError:
-  capnp = None
-if capnp:
-  from nupic.encoders.delta_capnp import DeltaEncoderProto
 
 
 class DeltaEncoder(AdaptiveScalarEncoder):
